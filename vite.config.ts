@@ -14,5 +14,6 @@ export default defineConfig({
         host: '0.0.0.0',
         strictPort: true,
         origin: `${process.env.DDEV_PRIMARY_URL?.replace(/:\d+$/, "")}:5173`,
+        hmr: true,
     },
 });
