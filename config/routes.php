@@ -26,27 +26,22 @@ use Cake\Routing\RouteBuilder;
 
 return function (RouteBuilder $routes): void {
     $routes->setRouteClass(DashedRoute::class);
-
-    $routes->scope('/', static function (RouteBuilder $builder): void {
-        $builder->connect('/', ['controller' => 'Pages', 'action' => 'display', 'home']);
-        $builder->connect('/pages/*', 'Pages::display');
-        $builder->connect('/login', ['controller' => 'Users', 'action' => 'login'], ['_name' => 'login']);
-        $builder->connect('/logout', ['controller' => 'Users', 'action' => 'logout'], ['_name' => 'logout']);
-        $builder->scope('/users', ['controller' => 'Users'], static function (RouteBuilder $builder): void {
-            $builder->connect('/{action}');
-        });
-        $builder->scope('/policies', ['controller' => 'Policies'], static function (RouteBuilder $builder): void {
-            $builder->connect('/', ['action' => 'index'], ['_name' => 'viewPolicies']);
-            $actions = ['view', 'add', 'edit', 'delete'];
-            foreach ($actions as $action) {
-                $builder->connect('/' . $action, ['action' => $action], ['_name' => $action . 'Policy']);
-            }
-        });
-        $builder->connect('/resource/*', [
-            'controller' => 'Policies',
-            'action' => 'resource',
-        ]);
+    $routes->redirect('/', ['_name' => 'viewPolicies']);
+    $routes->connect('/login', ['controller' => 'Users', 'action' => 'login'], ['_name' => 'login']);
+    $routes->connect('/logout', ['controller' => 'Users', 'action' => 'logout'], ['_name' => 'logout']);
+    $routes->scope('/users', ['controller' => 'Users'], static function (RouteBuilder $builder): void {
+        $builder->connect('/{action}');
     });
-
+    $routes->scope('/policies', ['controller' => 'Policies'], static function (RouteBuilder $builder): void {
+        $builder->connect('/', ['action' => 'index'], ['_name' => 'viewPolicies']);
+        $actions = ['view', 'add', 'edit', 'delete'];
+        foreach ($actions as $action) {
+            $builder->connect('/' . $action, ['action' => $action], ['_name' => $action . 'Policy']);
+        }
+    });
+    $routes->connect('/resource/*', [
+        'controller' => 'Policies',
+        'action' => 'resource',
+    ]);
     $routes->fallbacks();
 };
