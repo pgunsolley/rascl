@@ -4,9 +4,8 @@ declare(strict_types=1);
 namespace App\Controller\Api\V1;
 
 use App\Controller\Api\ApiController;
-use Cake\Core\Configure;
+use App\Service\JwtService;
 use Cake\Http\Exception\UnauthorizedException;
-use Firebase\JWT\JWT;
 
 /**
  * Users Controller
@@ -22,33 +21,23 @@ class UsersController extends ApiController
         $this->Authorization->skipAuthorization();
     }
 
-    public function authenticate()
+    public function authenticate(JwtService $jwt)
     {
         $result = $this->Authentication->getResult();
-        $key = Configure::read('Authentication.Authenticators.Jwt.privateKey', null);
-        $alg = Configure::read('Authentication.Authenticators.Jwt.algorithm', 'RS256');
-
-        if ($key !== null && $result->isValid()) {
+        if ($result->isValid()) {
             $user = $result->getData();
             $id = $user->get('id');
-            
             if ($id !== null) {
                 $host = $this->request->host();
-                $payload = [
-                    'iss' => $host,
-                    'aud' => $host,
-                    'sub' => $id,
-                    'iat' => 1356999524,
-                    'nbf' => 1357000000,
-                ];
-                $token = JWT::encode($payload, $key, $alg);
-                $response = ['token' => $token];
-                $this->set(compact('response'));
-                $this->viewBuilder()->setOption('serialize', 'response');
-                return;
+                $token = $jwt->sign($id, $host);
+                if ($token !== null) {
+                    $response = ['token' => $token];
+                    $this->set(compact('response'));
+                    $this->viewBuilder()->setOption('serialize', 'response');
+                    return;
+                }
             }
         }
-
         throw new UnauthorizedException();
     }
 }
