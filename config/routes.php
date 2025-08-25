@@ -48,7 +48,7 @@ return function (RouteBuilder $routes): void {
     });
     $routes->prefix('Api', static function (RouteBuilder $builder): void {
         $builder->prefix('V1', static function (RouteBuilder $builder): void {
-            $builder->post('/login', ['controller' => 'Users', 'action' => 'login'], 'api.v1.login');
+            $builder->post('/authenticate', ['controller' => 'Users', 'action' => 'authenticate'], 'api.v1.login');
         });
     });
     $routes->fallbacks();
