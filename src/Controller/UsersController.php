@@ -21,7 +21,7 @@ class UsersController extends AppController
     {
         $result = $this->Authentication->getResult();
         if ($result && $result->isValid()) {
-            return $this->redirect(['_name' => 'viewPolicies']);
+            return $this->redirect(['_name' => 'policies:index']);
         }
         if ($this->request->is('post')) {
             $this->Flash->error('Invalid username or password');

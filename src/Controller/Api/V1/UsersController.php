@@ -42,8 +42,9 @@ class UsersController extends ApiController
                     'nbf' => 1357000000,
                 ];
                 $token = JWT::encode($payload, $key, $alg);
-                $this->set(compact('token'));
-                $this->viewBuilder()->setOption('serialize', 'token');
+                $response = ['token' => $token];
+                $this->set(compact('response'));
+                $this->viewBuilder()->setOption('serialize', 'response');
                 return;
             }
         }
