@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "291ec8fe13978807649b6179f7aecc6f",
+    "content-hash": "a0920202e0de26b53a99fada906d731c",
     "packages": [
         {
             "name": "cakephp/authentication",
@@ -1129,6 +1129,48 @@
                 }
             ],
             "time": "2024-12-10T15:32:06+00:00"
+        },
+        {
+            "name": "passchn/cakephp-vite",
+            "version": "v2.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/brandcom/cakephp-vite.git",
+                "reference": "5bb15bb077d641ae3a89c8c3b5d7dc3f592d84cb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/brandcom/cakephp-vite/zipball/5bb15bb077d641ae3a89c8c3b5d7dc3f592d84cb",
+                "reference": "5bb15bb077d641ae3a89c8c3b5d7dc3f592d84cb",
+                "shasum": ""
+            },
+            "require": {
+                "cakephp/cakephp": "^5.0",
+                "php": ">=8.1"
+            },
+            "require-dev": {
+                "cakedc/cakephp-phpstan": "^3.0",
+                "cakephp/cakephp-codesniffer": "^5.0.0",
+                "phpunit/phpunit": "^10.1.0"
+            },
+            "type": "cakephp-plugin",
+            "autoload": {
+                "psr-4": {
+                    "TestApp\\": "tests/test_app/src/",
+                    "Cake\\Test\\": "vendor/cakephp/cakephp/tests/",
+                    "ViteHelper\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "ViteJS plugin for CakePHP",
+            "support": {
+                "issues": "https://github.com/brandcom/cakephp-vite/issues",
+                "source": "https://github.com/brandcom/cakephp-vite/tree/v2.4.0"
+            },
+            "time": "2024-03-09T10:46:50+00:00"
         },
         {
             "name": "psr/cache",

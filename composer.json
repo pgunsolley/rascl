@@ -15,7 +15,8 @@
         "friendsofcake/crud": "^7.2",
         "friendsofcake/crud-view": "^0.51.1",
         "friendsofcake/search": "^7.5",
-        "mobiledetect/mobiledetectlib": "^4.8.03"
+        "mobiledetect/mobiledetectlib": "^4.8.03",
+        "passchn/cakephp-vite": "^2.4"
     },
     "require-dev": {
         "cakephp/bake": "^3.0.0",

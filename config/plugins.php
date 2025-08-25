@@ -15,4 +15,5 @@ return [
     'CrudView' => [],
     'BootstrapUI' => [],
     'Search' => [],
+    'ViteHelper' => [],
 ];
