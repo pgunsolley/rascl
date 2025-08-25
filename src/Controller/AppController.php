@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Cake\Controller\Controller;
-use Cake\Event\EventInterface;
 use Crud\Controller\ControllerTrait;
 
 class AppController extends Controller
@@ -56,8 +55,7 @@ class AppController extends Controller
 
     public function beforeRender(\Cake\Event\EventInterface $event)
     {
-        if ($this->viewBuilder()->getClassName() === null) {
-            // FIXME: Breaks when accessing non-crud action
+        if ($this->Crud->isActionMapped() && $this->viewBuilder()->getClassName() === null) {
             $this->viewBuilder()->setClassName('CrudView\View\CrudView');
         }
     }
