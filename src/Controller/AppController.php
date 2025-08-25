@@ -28,14 +28,12 @@ class AppController extends Controller
     {
         parent::initialize();
 
+        $this->loadComponent('Authentication.Authentication', [
+            'logoutRedirect' => ['controller' => 'Users', 'action' => 'login'],
+        ]);
+        $this->loadComponent('Authorization.Authorization');
         $this->loadComponent('Flash');
-
-        /*
-         * Enable the following component for recommended CakePHP form protection settings.
-         * see https://book.cakephp.org/5/en/controllers/components/form-protection.html
-         */
-        //$this->loadComponent('FormProtection');
-
+        $this->loadComponent('FormProtection');
         $this->loadComponent('Crud.Crud', [
             'actions' => [
                 'Crud.Index',
@@ -50,13 +48,16 @@ class AppController extends Controller
                 'Crud.RelatedModels',
             ],
         ]);
+
+        if (in_array($this->request->getParam('action'), ['add', 'edit'])) {
+            $this->Crud->action()->setConfig('scaffold.fields_blacklist', ['created', 'modified']);
+        }
     }
 
-    public function beforeRender(EventInterface $event)
+    public function beforeRender(\Cake\Event\EventInterface $event)
     {
-        parent::beforeRender($event);
-
         if ($this->viewBuilder()->getClassName() === null) {
+            // FIXME: Breaks when accessing non-crud action
             $this->viewBuilder()->setClassName('CrudView\View\CrudView');
         }
     }

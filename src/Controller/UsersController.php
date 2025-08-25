@@ -10,4 +10,26 @@ namespace App\Controller;
  */
 class UsersController extends AppController
 {
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->Authentication->allowUnauthenticated(['login', 'add']);
+        $this->Authorization->skipAuthorization();
+    }
+
+    public function login()
+    {
+        $result = $this->Authentication->getResult();
+        if ($result && $result->isValid()) {
+            return $this->redirect(['_name' => 'viewPolicies']);
+        }
+        if ($this->request->is('post')) {
+            $this->Flash->error('Invalid username or password');
+        }
+    }
+
+    public function logout()
+    {
+        return $this->redirect($this->Authentication->logout());
+    }
 }

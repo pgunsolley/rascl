@@ -16,6 +16,16 @@ declare(strict_types=1);
  */
 namespace App;
 
+use Authentication\AuthenticationService;
+use Authentication\AuthenticationServiceInterface;
+use Authentication\AuthenticationServiceProviderInterface;
+use Authentication\Identifier\AbstractIdentifier;
+use Authentication\Middleware\AuthenticationMiddleware;
+use Authorization\AuthorizationService;
+use Authorization\AuthorizationServiceInterface;
+use Authorization\AuthorizationServiceProviderInterface;
+use Authorization\Middleware\AuthorizationMiddleware;
+use Authorization\Policy\OrmResolver;
 use Cake\Core\Configure;
 use Cake\Core\ContainerInterface;
 use Cake\Datasource\FactoryLocator;
@@ -27,6 +37,8 @@ use Cake\Http\MiddlewareQueue;
 use Cake\ORM\Locator\TableLocator;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
+use Cake\Routing\Router;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * Application setup class.
@@ -36,7 +48,7 @@ use Cake\Routing\Middleware\RoutingMiddleware;
  *
  * @extends \Cake\Http\BaseApplication<\App\Application>
  */
-class Application extends BaseApplication
+class Application extends BaseApplication implements AuthenticationServiceProviderInterface, AuthorizationServiceProviderInterface
 {
     /**
      * Load all the application configuration and bootstrap logic.
@@ -87,7 +99,9 @@ class Application extends BaseApplication
             // https://book.cakephp.org/5/en/security/csrf.html#cross-site-request-forgery-csrf-middleware
             ->add(new CsrfProtectionMiddleware([
                 'httponly' => true,
-            ]));
+            ]))
+            ->add(new AuthenticationMiddleware($this))
+            ->add(new AuthorizationMiddleware($this));
 
         return $middlewareQueue;
     }
@@ -101,5 +115,46 @@ class Application extends BaseApplication
      */
     public function services(ContainerInterface $container): void
     {
+    }
+
+    public function getAuthenticationService(ServerRequestInterface $request): AuthenticationServiceInterface
+    {
+        $service = new AuthenticationService();
+        $loginUrl = Router::url([
+            'prefix' => false,
+            'plugin' => null,
+            'controller' => 'Users',
+            'action' => 'login',
+        ]);
+        $service->setConfig([
+            'loginRedirect' => ['controller' => 'Policies', 'action' => 'index'],
+            'unauthenticatedRedirect' => $loginUrl,
+            'queryParam' => 'redirect',
+        ]);
+        $fields = [
+            AbstractIdentifier::CREDENTIAL_USERNAME => 'email',
+            AbstractIdentifier::CREDENTIAL_PASSWORD => 'password'
+        ];
+        $passwordIdentifier = [
+            'Authentication.Password' => [
+                'fields' => $fields,
+            ],
+        ];
+        //$service->loadAuthenticator('Authentication.Jwt'); // TODO: Configure JWT
+        $service->loadAuthenticator('Authentication.Session', [
+            'identifier' => $passwordIdentifier,
+        ]);
+        $service->loadAuthenticator('Authentication.Form', [
+            'identifier' => $passwordIdentifier,
+            'fields' => $fields,
+            'loginUrl' => $loginUrl,
+        ]);
+
+        return $service;
+    }
+
+    public function getAuthorizationService(ServerRequestInterface $request): AuthorizationServiceInterface
+    {
+        return new AuthorizationService(new OrmResolver());
     }
 }
