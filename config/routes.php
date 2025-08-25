@@ -21,27 +21,35 @@
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
 
+use Cake\Http\Middleware\CsrfProtectionMiddleware;
 use Cake\Routing\Route\DashedRoute;
 use Cake\Routing\RouteBuilder;
 
 return function (RouteBuilder $routes): void {
     $routes->setRouteClass(DashedRoute::class);
-    $routes->redirect('/', ['_name' => 'viewPolicies']);
-    $routes->connect('/login', ['controller' => 'Users', 'action' => 'login'], ['_name' => 'login']);
-    $routes->connect('/logout', ['controller' => 'Users', 'action' => 'logout'], ['_name' => 'logout']);
-    $routes->scope('/users', ['controller' => 'Users'], static function (RouteBuilder $builder): void {
-        $builder->connect('/{action}');
+    $routes->scope('/', static function (RouteBuilder $builder): void {
+        $builder->registerMiddleware('csrf', new CsrfProtectionMiddleware([
+            'httponly' => true,
+        ]));
+        $builder->applyMiddleware('csrf');
+        $builder->redirect('/', ['_name' => 'viewPolicies']);
+        $builder->connect('/login', ['controller' => 'Users', 'action' => 'login'], ['_name' => 'login']);
+        $builder->connect('/logout', ['controller' => 'Users', 'action' => 'logout'], ['_name' => 'logout']);
+        $builder->scope('/users', ['controller' => 'Users'], static function (RouteBuilder $builder): void {
+            $builder->connect('/{action}');
+        });
+        $builder->scope('/policies', ['controller' => 'Policies'], static function (RouteBuilder $builder): void {
+            $builder->connect('/', ['action' => 'index'], ['_name' => 'viewPolicies']);
+            $actions = ['view', 'add', 'edit', 'delete'];
+            foreach ($actions as $action) {
+                $builder->connect('/' . $action, ['action' => $action], ['_name' => $action . 'Policy']);
+            }
+        });
     });
-    $routes->scope('/policies', ['controller' => 'Policies'], static function (RouteBuilder $builder): void {
-        $builder->connect('/', ['action' => 'index'], ['_name' => 'viewPolicies']);
-        $actions = ['view', 'add', 'edit', 'delete'];
-        foreach ($actions as $action) {
-            $builder->connect('/' . $action, ['action' => $action], ['_name' => $action . 'Policy']);
-        }
+    $routes->prefix('Api', static function (RouteBuilder $builder): void {
+        $builder->prefix('V1', static function (RouteBuilder $builder): void {
+            $builder->post('/login', ['controller' => 'Users', 'action' => 'login'], 'api.v1.login');
+        });
     });
-    $routes->connect('/resource/*', [
-        'controller' => 'Policies',
-        'action' => 'resource',
-    ]);
     $routes->fallbacks();
 };
