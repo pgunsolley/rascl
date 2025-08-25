@@ -1,0 +1,8 @@
+{
+  "webroot_src/json-editor.ts": {
+    "file": "assets/json-editor-BBWfKrre.js",
+    "name": "json-editor",
+    "src": "webroot_src/json-editor.ts",
+    "isEntry": true
+  }
+}
