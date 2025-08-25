@@ -55,8 +55,10 @@ class AppController extends Controller
 
     public function beforeRender(\Cake\Event\EventInterface $event)
     {
+        $viewBuilder = $this->viewBuilder();
         if ($this->Crud->isActionMapped() && $this->viewBuilder()->getClassName() === null) {
-            $this->viewBuilder()->setClassName('CrudView\View\CrudView');
+            $viewBuilder->setClassName('CrudView\View\CrudView');
         }
+        $viewBuilder->addHelper('ViteHelper.ViteScripts');
     }
 }
