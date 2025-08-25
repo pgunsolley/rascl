@@ -1,0 +1,22 @@
+{
+  "name": "rascl-libs",
+  "version": "1.0.0",
+  "description": "Rascl Client Libraries",
+  "homepage": "https://bitbucket.org/patrick-gunsolley/rascl#readme",
+  "bugs": {
+    "url": "https://bitbucket.org/patrick-gunsolley/rascl/issues"
+  },
+  "license": "MIT",
+  "author": "Patrick Gunsolley",
+  "type": "commonjs",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "jsoneditor": "^10.4.0"
+  }
+}

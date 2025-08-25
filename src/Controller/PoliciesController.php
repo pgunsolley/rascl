@@ -10,4 +10,15 @@ namespace App\Controller;
  */
 class PoliciesController extends AppController
 {
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->Authorization->skipAuthorization();
+    }
+
+    public function resource()
+    {
+        // TODO: Handle auth and request to resource
+        dd($this->request->getParam('pass'));
+    }
 }

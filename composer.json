@@ -11,6 +11,7 @@
         "cakephp/cakephp": "5.2.*",
         "cakephp/migrations": "^4.0.0",
         "cakephp/plugin-installer": "^2.0",
+        "firebase/php-jwt": "^6.11",
         "friendsofcake/crud": "^7.2",
         "friendsofcake/crud-view": "^0.51.1",
         "friendsofcake/search": "^7.5",
