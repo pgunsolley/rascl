@@ -17,26 +17,13 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Cake\Controller\Controller;
+use Cake\Event\EventInterface;
+use Crud\Controller\ControllerTrait;
 
-/**
- * Application Controller
- *
- * Add your application-wide methods in the class below, your controllers
- * will inherit them.
- *
- * @link https://book.cakephp.org/5/en/controllers.html#the-app-controller
- */
 class AppController extends Controller
 {
-    /**
-     * Initialization hook method.
-     *
-     * Use this method to add common initialization code like loading components.
-     *
-     * e.g. `$this->loadComponent('FormProtection');`
-     *
-     * @return void
-     */
+    use ControllerTrait;
+
     public function initialize(): void
     {
         parent::initialize();
@@ -48,5 +35,29 @@ class AppController extends Controller
          * see https://book.cakephp.org/5/en/controllers/components/form-protection.html
          */
         //$this->loadComponent('FormProtection');
+
+        $this->loadComponent('Crud.Crud', [
+            'actions' => [
+                'Crud.Index',
+                'Crud.View',
+                'Crud.Add',
+                'Crud.Edit',
+                'Crud.Delete',
+            ],
+            'listeners' => [
+                'CrudView.View',
+                'Crud.Redirect',
+                'Crud.RelatedModels',
+            ],
+        ]);
+    }
+
+    public function beforeRender(EventInterface $event)
+    {
+        parent::beforeRender($event);
+
+        if ($this->viewBuilder()->getClassName() === null) {
+            $this->viewBuilder()->setClassName('CrudView\View\CrudView');
+        }
     }
 }

@@ -6,9 +6,14 @@
     "homepage": "https://cakephp.org",
     "require": {
         "php": ">=8.1",
+        "cakephp/authentication": "^3.3",
+        "cakephp/authorization": "^3.4",
         "cakephp/cakephp": "5.2.*",
         "cakephp/migrations": "^4.0.0",
         "cakephp/plugin-installer": "^2.0",
+        "friendsofcake/crud": "^7.2",
+        "friendsofcake/crud-view": "^0.51.1",
+        "friendsofcake/search": "^7.5",
         "mobiledetect/mobiledetectlib": "^4.8.03"
     },
     "require-dev": {
