@@ -113,7 +113,7 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
             '_name' => 'login',
         ]);
         $service->setConfig([
-            'loginRedirect' => ['controller' => 'Policies', 'action' => 'index'],
+            'loginRedirect' => Router::url(['_name' => 'policies:view']),
             'unauthenticatedRedirect' => $loginUrl,
             'queryParam' => 'redirect',
         ]);
@@ -130,17 +130,17 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
         $prefix = $request->getParam('prefix');
 
         if ($prefix && str_contains($prefix, 'Api')) {
-            $service->loadAuthenticator('Authentication.Jwt', [
-                'identifier' => 'Authentication.JwtSubject',
-                'secretKey' => Configure::read('Authentication.Authenticators.Jwt.publicKey', null),
-                'algorithm' => Configure::read('Authentication.Authenticators.Jwt.algorithm', 'RS256'),
-            ]);
             $service->loadAuthenticator('Authentication.Form', [
                 'identifier' => $passwordIdentifier,
                 'fields' => $fields,
                 'loginUrl' => Router::url([
-                    '_name' => 'api.v1.login',
+                    '_name' => 'api:v1:authenticate',
                 ]),
+            ]);
+            $service->loadAuthenticator('Authentication.Jwt', [
+                'identifier' => 'Authentication.JwtSubject',
+                'secretKey' => Configure::read('Authentication.Authenticators.Jwt.publicKey', null),
+                'algorithm' => Configure::read('Authentication.Authenticators.Jwt.algorithm', 'RS256'),
             ]);
         } else {
             $service->loadAuthenticator('Authentication.Session', [

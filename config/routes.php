@@ -35,20 +35,38 @@ return function (RouteBuilder $routes): void {
         $builder->redirect('/', ['_name' => 'viewPolicies']);
         $builder->connect('/login', ['controller' => 'Users', 'action' => 'login'], ['_name' => 'login']);
         $builder->connect('/logout', ['controller' => 'Users', 'action' => 'logout'], ['_name' => 'logout']);
-        $builder->scope('/users', ['controller' => 'Users'], static function (RouteBuilder $builder): void {
-            $builder->connect('/{action}');
-        });
-        $builder->scope('/policies', ['controller' => 'Policies'], static function (RouteBuilder $builder): void {
-            $builder->connect('/', ['action' => 'index'], ['_name' => 'viewPolicies']);
+        $builder->scope('/users', ['_namePrefix' => 'users:', 'controller' => 'Users'], static function (RouteBuilder $builder): void {
+            $builder->connect('/', ['action' => 'index'], ['_name' => 'index']);
             $actions = ['view', 'add', 'edit', 'delete'];
             foreach ($actions as $action) {
-                $builder->connect('/' . $action, ['action' => $action], ['_name' => $action . 'Policy']);
+                $builder->connect('/' . $action, ['action' => $action], ['_name' => $action]);
+            }
+        });
+        $builder->scope('/policies', ['_namePrefix' => 'policies:', 'controller' => 'Policies'], static function (RouteBuilder $builder): void {
+            $builder->connect('/', ['action' => 'index'], ['_name' => 'index']);
+            $actions = ['view', 'add', 'edit', 'delete'];
+            foreach ($actions as $action) {
+                $builder->connect('/' . $action, ['action' => $action], ['_name' => $action]);
             }
         });
     });
-    $routes->prefix('Api', static function (RouteBuilder $builder): void {
-        $builder->prefix('V1', static function (RouteBuilder $builder): void {
-            $builder->post('/authenticate', ['controller' => 'Users', 'action' => 'authenticate'], 'api.v1.login');
+    $routes->prefix('Api', ['_namePrefix' => 'api:'], static function (RouteBuilder $builder): void {
+        $builder->prefix('V1', ['_namePrefix' => 'v1:'], static function (RouteBuilder $builder): void {
+            $builder->post('/authenticate', ['controller' => 'Users', 'action' => 'authenticate'], 'authenticate');
+            $builder->scope('/users', ['_namePrefix' => 'users:', 'controller' => 'Users'], static function (RouteBuilder $builder): void {
+                $builder->connect('/', ['action' => 'index'], ['_name' => 'index']);
+                $actions = ['view', 'add', 'edit', 'delete'];
+                foreach ($actions as $action) {
+                    $builder->connect('/' . $action, ['action' => $action], ['_name' => $action]);
+                }
+            });
+            $builder->scope('/policies', ['_namePrefix' => 'policies:', 'controller' => 'Policies'], static function (RouteBuilder $builder): void {
+                $builder->connect('/', ['action' => 'index'], ['_name' => 'index']);
+                $actions = ['view', 'add', 'edit', 'delete'];
+                foreach ($actions as $action) {
+                    $builder->connect('/' . $action, ['action' => $action], ['_name' => $action]);
+                }
+            });
         });
     });
     $routes->fallbacks();
