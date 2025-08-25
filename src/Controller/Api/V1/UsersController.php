@@ -18,11 +18,11 @@ class UsersController extends ApiController
     public function initialize(): void
     {
         parent::initialize();
-        $this->Authentication->allowUnauthenticated(['login']);
+        $this->Authentication->allowUnauthenticated(['authenticate']);
         $this->Authorization->skipAuthorization();
     }
 
-    public function login()
+    public function authenticate()
     {
         $result = $this->Authentication->getResult();
         $key = Configure::read('Authentication.Authenticators.Jwt.privateKey', null);
