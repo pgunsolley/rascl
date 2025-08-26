@@ -15,6 +15,9 @@ class CrudViewListener extends BaseListener
             $this->_controller->Crud->action()->setConfig('scaffold.utility_navigation', [
                 new MenuItem('Log Out', ['_name' => 'logout']),
             ]);
+            if (in_array($this->_controller->getRequest()->getParam('action'), ['add', 'edit'])) {
+                $this->_controller->Crud->action()->setConfig('scaffold.fields_blacklist', ['created', 'modified']);
+            }
         }
     }
 
@@ -23,9 +26,6 @@ class CrudViewListener extends BaseListener
         $viewBuilder = $this->_controller->viewBuilder();
         if ($this->_controller->Crud->isActionMapped() && $viewBuilder->getClassName() === null) {
             $viewBuilder->setClassName('CrudView\View\CrudView');
-            if (in_array($this->_controller->getRequest()->getParam('action'), ['add', 'edit'])) {
-                $this->_controller->Crud->action()->setConfig('scaffold.fields_blacklist', ['created', 'modified']);
-            }
         }
     }
 }
