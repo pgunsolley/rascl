@@ -16,6 +16,7 @@ declare(strict_types=1);
  */
 namespace App\Controller;
 
+use App\Listener\CrudViewListener;
 use Cake\Controller\Controller;
 use Crud\Controller\ControllerTrait;
 
@@ -45,19 +46,13 @@ class AppController extends Controller
                 'CrudView.View',
                 'Crud.Redirect',
                 'Crud.RelatedModels',
+                CrudViewListener::class,
             ],
         ]);
     }
 
     public function beforeRender(\Cake\Event\EventInterface $event)
     {
-        $viewBuilder = $this->viewBuilder();
-        if ($this->Crud->isActionMapped() && $this->viewBuilder()->getClassName() === null) {
-            $viewBuilder->setClassName('CrudView\View\CrudView');
-            if (in_array($this->request->getParam('action'), ['add', 'edit'])) {
-                $this->Crud->action()->setConfig('scaffold.fields_blacklist', ['created', 'modified']);
-            }
-        }
-        $viewBuilder->addHelper('ViteHelper.ViteScripts');
+        $this->viewBuilder()->addHelper('ViteHelper.ViteScripts');
     }
 }
