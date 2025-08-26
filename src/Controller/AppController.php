@@ -47,10 +47,6 @@ class AppController extends Controller
                 'Crud.RelatedModels',
             ],
         ]);
-
-        if (in_array($this->request->getParam('action'), ['add', 'edit'])) {
-            $this->Crud->action()->setConfig('scaffold.fields_blacklist', ['created', 'modified']);
-        }
     }
 
     public function beforeRender(\Cake\Event\EventInterface $event)
@@ -58,6 +54,9 @@ class AppController extends Controller
         $viewBuilder = $this->viewBuilder();
         if ($this->Crud->isActionMapped() && $this->viewBuilder()->getClassName() === null) {
             $viewBuilder->setClassName('CrudView\View\CrudView');
+            if (in_array($this->request->getParam('action'), ['add', 'edit'])) {
+                $this->Crud->action()->setConfig('scaffold.fields_blacklist', ['created', 'modified']);
+            }
         }
         $viewBuilder->addHelper('ViteHelper.ViteScripts');
     }
