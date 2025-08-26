@@ -17,6 +17,14 @@ class UsersController extends AppController
         $this->Authorization->skipAuthorization();
     }
 
+    public function index()
+    {
+        $action = $this->Crud->action();
+        $action->setConfig('scaffold.fields_blacklist', ['password']);
+        $action->findMethod('index');
+        $this->Crud->execute();
+    }
+
     public function login()
     {
         $result = $this->Authentication->getResult();
