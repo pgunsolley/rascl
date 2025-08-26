@@ -28,7 +28,7 @@ return fn(RouteBuilder $r) => $chain($r)
             'httponly' => true,
         ])))
         (fn($r) => $r->applyMiddleware('csrf'))
-        (fn($r) => $r->connect('/', ['_name' => 'policies:view']))
+        (fn($r) => $r->redirect('/', ['_name' => 'policies:index']))
         (fn($r) => $r->connect('/login', ['controller' => 'Users', 'action' => 'login'], ['_name' => 'login']))
         (fn($r) => $r->connect('/logout', ['controller' => 'Users', 'action' => 'logout'], ['_name' => 'logout']))
         (fn($r) => $r->scope('/users', ['_namePrefix' => 'users:', 'controller' => 'Users'], $crud))
