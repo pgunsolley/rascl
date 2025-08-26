@@ -41,4 +41,4 @@ return fn(RouteBuilder $r) => $chain($r)
             (fn($r) => $r->scope('/policies', ['_namePrefix' => 'policies:', 'controller' => 'Policies'], $crud))
         ))
     ))
-    (fn($r) => $r->fallbacks());
+;
