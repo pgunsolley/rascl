@@ -12,6 +12,7 @@ use Cake\Validation\Validator;
  * Policies Model
  *
  * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Users
+ * @property \App\Model\Table\TagsTable&\Cake\ORM\Association\BelongsTo $Tags
  *
  * @method \App\Model\Entity\Policy newEmptyEntity()
  * @method \App\Model\Entity\Policy newEntity(array $data, array $options = [])
@@ -47,9 +48,17 @@ class PoliciesTable extends Table
 
         $this->addBehavior('Timestamp');
 
-        $this->belongsTo('Users', [
-            'foreignKey' => 'user_id',
-            'joinType' => 'INNER',
+        $this->belongsToMany('Users', [
+            'joinTable' => 'policies_users',
+            'foreignKey' => 'policy_id',
+            'bindingKey' => 'id',
+            'targetForeignKey' => 'user_id',
+        ]);
+        $this->belongsToMany('Tags', [
+            'joinTable' => 'policies_tags',
+            'foreignKey' => 'policy_id',
+            'bindingKey' => 'id',
+            'targetForeignKey' => 'tag_id',
         ]);
     }
 
@@ -62,8 +71,10 @@ class PoliciesTable extends Table
     public function validationDefault(Validator $validator): Validator
     {
         $validator
-            ->uuid('user_id')
-            ->notEmptyString('user_id');
+            ->scalar('name')
+            ->maxLength('name', 255)
+            ->requirePresence('name', 'create')
+            ->notEmptyString('name');
 
         $validator
             ->url('url')
@@ -93,14 +104,13 @@ class PoliciesTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $rules->add($rules->isUnique(['user_id', 'url']), ['errorField' => 'user_id']);
-        $rules->add($rules->existsIn(['user_id'], 'Users'), ['errorField' => 'user_id']);
+        $rules->add($rules->isUnique(['name', 'url']), ['errorField' => 'name']);
 
         return $rules;
     }
 
     public function findIndex(SelectQuery $query)
     {
-        return $query->select(['id', 'user_id', 'url', 'created', 'modified']);
+        return $query->select(['id', 'name', 'url', 'created', 'modified']);
     }
 }

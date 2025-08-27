@@ -110,16 +110,6 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
     public function getAuthenticationService(ServerRequestInterface $request): AuthenticationServiceInterface
     {
         $service = new AuthenticationService();
-        $loginUrl = Router::url([
-            'prefix' => false,
-            'plugin' => null,
-            '_name' => 'login',
-        ]);
-        $service->setConfig([
-            'loginRedirect' => Router::url(['_name' => 'policies:view']),
-            'unauthenticatedRedirect' => $loginUrl,
-            'queryParam' => 'redirect',
-        ]);
         $fields = [
             AbstractIdentifier::CREDENTIAL_USERNAME => 'email',
             AbstractIdentifier::CREDENTIAL_PASSWORD => 'password',
@@ -136,6 +126,11 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
         $prefix = $request->getParam('prefix');
 
         if ($prefix && str_contains($prefix, 'Api')) {
+            $service->loadAuthenticator('Authentication.Jwt', [
+                'identifier' => 'Authentication.JwtSubject',
+                'secretKey' => Configure::read('Authentication.Authenticators.Jwt.publicKey', null),
+                'algorithm' => Configure::read('Authentication.Authenticators.Jwt.algorithm', 'RS256'),
+            ]);
             $service->loadAuthenticator('Authentication.Form', [
                 'identifier' => $passwordIdentifier,
                 'fields' => $fields,
@@ -143,18 +138,25 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
                     '_name' => 'api:v1:authenticate',
                 ]),
             ]);
-            $service->loadAuthenticator('Authentication.Jwt', [
-                'identifier' => 'Authentication.JwtSubject',
-                'secretKey' => Configure::read('Authentication.Authenticators.Jwt.publicKey', null),
-                'algorithm' => Configure::read('Authentication.Authenticators.Jwt.algorithm', 'RS256'),
-            ]);
-        } else {
-            $service->loadAuthenticator('Authentication.Form', [
-                'identifier' => $passwordIdentifier,
-                'fields' => $fields,
-                'loginUrl' => $loginUrl,
-            ]);
+
+            return $service;
         }
+
+        $loginUrl = Router::url([
+            'prefix' => false,
+            'plugin' => null,
+            '_name' => 'login',
+        ]);
+        $service->setConfig([
+            'loginRedirect' => Router::url(['_name' => 'policies:view']),
+            'unauthenticatedRedirect' => $loginUrl,
+            'queryParam' => 'redirect',
+        ]);
+        $service->loadAuthenticator('Authentication.Form', [
+            'identifier' => $passwordIdentifier,
+            'fields' => $fields,
+            'loginUrl' => $loginUrl,
+        ]);
 
         return $service;
     }

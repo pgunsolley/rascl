@@ -9,13 +9,14 @@ use Cake\ORM\Entity;
  * Policy Entity
  *
  * @property string $id
- * @property string $user_id
+ * @property string $name
  * @property string $url
  * @property string|array $descriptor
  * @property \Cake\I18n\DateTime $created
  * @property \Cake\I18n\DateTime $modified
  *
- * @property \App\Model\Entity\User $user
+ * @property \App\Model\Entity\User[] $users
+ * @property \App\Model\Entity\Tag[] $tags
  */
 class Policy extends Entity
 {
@@ -29,12 +30,13 @@ class Policy extends Entity
      * @var array<string, bool>
      */
     protected array $_accessible = [
-        'user_id' => true,
+        'name' => true,
         'url' => true,
         'descriptor' => true,
         'created' => true,
         'modified' => true,
-        'user' => true,
+        'users' => true,
+        'tags' => true,
     ];
 
     protected function _setDescriptor(string|array $value): string|array

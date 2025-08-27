@@ -19,36 +19,8 @@ class PoliciesController extends AppController
     public function index()
     {
         $action = $this->Crud->action();
-        $action->setConfig('scaffold.fields_blacklist', ['descriptor']);
-        $action->setConfig('scaffold.fields', [
-            'id',
-            'url',
-            'user_id' => [
-                'formatter' => 'element',
-                'element' => 'fields/policies/user_id_item',
-                'action' => 'index',
-            ],
-        ]);
+        $action->setConfig('scaffold.fields_blacklist', ['id', 'descriptor']);
         $action->findMethod('index');
-        $this->Crud->execute();
-    }
-
-    public function view()
-    {
-        $action = $this->Crud->action();
-        $action->setConfig('scaffold.fields', [
-            'user_id',
-            'id',
-            'url',
-            'user_id' => [
-                'formatter' => 'element',
-                'element' => 'fields/policies/user_id_item',
-                'action' => 'index',
-            ],
-            'descriptor',
-            'created',
-            'modified',
-        ]);
         $this->Crud->execute();
     }
 }
