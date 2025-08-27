@@ -22,23 +22,22 @@ $chain = static function (RouteBuilder $builder) {
 };
 
 return fn(RouteBuilder $r) => $chain($r)
-    (fn($r) => $r->setRouteClass(DashedRoute::class))
-    (fn($r) => $r->scope('/', fn(RouteBuilder $r) => $chain($r)
-        (fn($r) => $r->registerMiddleware('csrf', new CsrfProtectionMiddleware([
+    (fn(RouteBuilder $r) => $r->setRouteClass(DashedRoute::class))
+    (fn(RouteBuilder $r) => $r->scope('/', fn(RouteBuilder $r) => $chain($r)
+        (fn(RouteBuilder $r) => $r->registerMiddleware('csrf', new CsrfProtectionMiddleware([
             'httponly' => true,
         ])))
-        (fn($r) => $r->applyMiddleware('csrf'))
-        (fn($r) => $r->redirect('/', ['_name' => 'policies:index']))
-        (fn($r) => $r->connect('/login', ['controller' => 'Users', 'action' => 'login'], ['_name' => 'login']))
-        (fn($r) => $r->connect('/logout', ['controller' => 'Users', 'action' => 'logout'], ['_name' => 'logout']))
-        (fn($r) => $r->scope('/users', ['_namePrefix' => 'users:', 'controller' => 'Users'], $crud))
-        (fn($r) => $r->scope('/policies', ['_namePrefix' => 'policies:', 'controller' => 'Policies'], $crud))
+        (fn(RouteBuilder $r) => $r->applyMiddleware('csrf'))
+        (fn(RouteBuilder $r) => $r->redirect('/', ['_name' => 'policies:index']))
+        (fn(RouteBuilder $r) => $r->connect('/login', ['controller' => 'Users', 'action' => 'login'], ['_name' => 'login']))
+        (fn(RouteBuilder $r) => $r->connect('/logout', ['controller' => 'Users', 'action' => 'logout'], ['_name' => 'logout']))
+        (fn(RouteBuilder $r) => $r->scope('/users', ['_namePrefix' => 'users:', 'controller' => 'Users'], $crud))
+        (fn(RouteBuilder $r) => $r->scope('/policies', ['_namePrefix' => 'policies:', 'controller' => 'Policies'], $crud))
     ))
-    (fn($r) => $r->prefix('Api', ['_namePrefix' => 'api:'], fn(RouteBuilder $r) => $chain($r)
-        (fn($r) => $r->prefix('V1', ['_namePrefix' => 'v1:'], fn(RouteBuilder $r) => $chain($r)
-            (fn($r) => $r->post('/authenticate', ['controller' => 'Users', 'action' => 'authenticate'], 'authenticate'))
-            (fn($r) => $r->scope('/users', ['_namePrefix' => 'users:', 'controller' => 'Users'], $crud))
-            (fn($r) => $r->scope('/policies', ['_namePrefix' => 'policies:', 'controller' => 'Policies'], $crud))
+    (fn(RouteBuilder $r) => $r->prefix('Api', ['_namePrefix' => 'api:'], fn(RouteBuilder $r) => $chain($r)
+        (fn(RouteBuilder $r) => $r->prefix('V1', ['_namePrefix' => 'v1:'], fn(RouteBuilder $r) => $chain($r)
+            (fn(RouteBuilder $r) => $r->post('/authenticate', ['controller' => 'Users', 'action' => 'authenticate'], 'authenticate'))
+            (fn(RouteBuilder $r) => $r->resources('Users')->resources('Policies'))
         ))
     ))
 ;
