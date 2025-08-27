@@ -129,6 +129,9 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
                 'fields' => $fields,
             ],
         ];
+        $service->loadAuthenticator('Authentication.Session', [
+            'identifier' => $passwordIdentifier,
+        ]);
 
         $prefix = $request->getParam('prefix');
 
@@ -146,9 +149,6 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
                 'algorithm' => Configure::read('Authentication.Authenticators.Jwt.algorithm', 'RS256'),
             ]);
         } else {
-            $service->loadAuthenticator('Authentication.Session', [
-                'identifier' => $passwordIdentifier,
-            ]);
             $service->loadAuthenticator('Authentication.Form', [
                 'identifier' => $passwordIdentifier,
                 'fields' => $fields,
