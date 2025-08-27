@@ -36,4 +36,9 @@ class Policy extends Entity
         'modified' => true,
         'user' => true,
     ];
+
+    protected function _setDescriptor(string $value): string
+    {
+        return json_encode(json_decode($value, true));
+    }
 }
