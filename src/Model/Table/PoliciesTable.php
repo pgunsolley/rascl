@@ -66,7 +66,7 @@ class PoliciesTable extends Table
             ->notEmptyString('user_id');
 
         $validator
-            ->scalar('url')
+            ->url('url')
             ->maxLength('url', 255)
             ->requirePresence('url', 'create')
             ->notEmptyString('url');
