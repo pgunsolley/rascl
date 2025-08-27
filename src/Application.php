@@ -40,6 +40,7 @@ use Cake\Routing\Middleware\RoutingMiddleware;
 use Cake\Routing\Router;
 use Psr\Http\Message\ServerRequestInterface;
 use Cake\Http\ServerRequest;
+use Crud\Error\ExceptionRenderer;
 
 /**
  * Application setup class.
@@ -76,7 +77,7 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
     public function middleware(MiddlewareQueue $middlewareQueue): MiddlewareQueue
     {
         $middlewareQueue
-            ->add(new ErrorHandlerMiddleware(Configure::read('Error'), $this))
+            ->add(new ErrorHandlerMiddleware(['exceptionRenderer' => ExceptionRenderer::class] + Configure::read('Error'), $this))
             ->add(new AssetMiddleware([
                 'cacheTime' => Configure::read('Asset.cacheTime'),
             ]))
