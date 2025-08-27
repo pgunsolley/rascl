@@ -25,11 +25,30 @@ class PoliciesController extends AppController
             'url',
             'user_id' => [
                 'formatter' => 'element',
-                'element' => 'fields/policies/index/descriptor_column_item',
+                'element' => 'fields/policies/user_id_item',
                 'action' => 'index',
             ],
         ]);
         $action->findMethod('index');
+        $this->Crud->execute();
+    }
+
+    public function view()
+    {
+        $action = $this->Crud->action();
+        $action->setConfig('scaffold.fields', [
+            'user_id',
+            'id',
+            'url',
+            'user_id' => [
+                'formatter' => 'element',
+                'element' => 'fields/policies/user_id_item',
+                'action' => 'index',
+            ],
+            'descriptor',
+            'created',
+            'modified',
+        ]);
         $this->Crud->execute();
     }
 }

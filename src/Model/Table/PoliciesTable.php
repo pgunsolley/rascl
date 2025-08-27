@@ -75,7 +75,11 @@ class PoliciesTable extends Table
             ->scalar('descriptor')
             ->maxLength('descriptor', 4294967295)
             ->requirePresence('descriptor', 'create')
-            ->notEmptyString('descriptor');
+            ->notEmptyString('descriptor')
+            ->add('descriptor', 'validJson', [
+                'rule' => fn($value) => json_validate($value),
+                'message' => 'The descriptor must be syntactically valid JSON',
+            ]);
 
         return $validator;
     }
