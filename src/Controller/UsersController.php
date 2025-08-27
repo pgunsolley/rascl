@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\View\AppView;
+
 /**
  * Users Controller
  *
@@ -27,9 +29,7 @@ class UsersController extends AppController
 
     public function add()
     {
-        $action = $this->Crud->action();
-        $action->setConfig('scaffold.sidebar_navigation', false);
-        $action->setConfig('scaffold.utility_navigation', []);
+        $this->viewBuilder()->setClassName(AppView::class);
         $this->Crud->execute();
     }
 
