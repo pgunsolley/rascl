@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 use Migrations\BaseMigration;
 
-class CreatePolicies extends BaseMigration
+class CreateTags extends BaseMigration
 {
     /**
      * Change Method.
@@ -15,24 +15,15 @@ class CreatePolicies extends BaseMigration
     public function change(): void
     {
         $this
-            ->table('policies', ['id' => false, 'primary_key' => ['id']])
+            ->table('tags', ['id' => false, 'primary_key' => ['id']])
             ->addColumn('id', 'uuid', [
                 'default' => null,
                 'null' => false,
             ])
-            ->addColumn('name', 'string', [
+            ->addColumn('title', 'string', [
                 'default' => null,
                 'null' => false,
             ])
-            ->addColumn('url', 'string', [
-                'default' => null,
-                'null' => false,
-            ])
-            ->addColumn('descriptor', 'json', [
-                'default' => null,
-                'null' => false,
-            ])
-            ->addIndex(['name', 'url'], ['unique' => true])
             ->addColumn('created', 'datetime')
             ->addColumn('modified', 'datetime')
             ->create();

@@ -3,22 +3,20 @@ declare(strict_types=1);
 
 namespace App\Model\Entity;
 
-use Authentication\PasswordHasher\DefaultPasswordHasher;
 use Cake\ORM\Entity;
 
 /**
- * User Entity
+ * Tag Entity
  *
  * @property string $id
- * @property string $email
- * @property string $password
+ * @property string $title
  * @property \Cake\I18n\DateTime $created
  * @property \Cake\I18n\DateTime $modified
  *
  * @property \App\Model\Entity\Policy[] $policies
- * @property \App\Model\Entity\Tag[] $tags
+ * @property \App\Model\Entity\User[] $users
  */
-class User extends Entity
+class Tag extends Entity
 {
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
@@ -30,25 +28,10 @@ class User extends Entity
      * @var array<string, bool>
      */
     protected array $_accessible = [
-        'email' => true,
-        'password' => true,
+        'title' => true,
         'created' => true,
         'modified' => true,
         'policies' => true,
-        'tags' => true,
+        'users' => true,
     ];
-
-    /**
-     * Fields that are excluded from JSON versions of the entity.
-     *
-     * @var list<string>
-     */
-    protected array $_hidden = [
-        'password',
-    ];
-
-    protected function _setPassword(string $value): string
-    {
-        return (new DefaultPasswordHasher())->hash($value);
-    }
 }

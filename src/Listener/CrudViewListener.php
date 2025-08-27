@@ -11,12 +11,16 @@ class CrudViewListener extends BaseListener
 {
     public function beforeFilter()
     {
-        if ($this->_controller->Crud->isActionMapped()) {
-            $this->_controller->Crud->action()->setConfig('scaffold.utility_navigation', [
-                new MenuItem('Log Out', ['_name' => 'logout']),
-            ]);
+        $crud = $this->_controller->Crud;
+        if ($crud->isActionMapped()) {
+            $action = $crud->action();
+            if ($this->_controller->Authentication->getResult()->isValid()) {
+                $action->setConfig('scaffold.utility_navigation', [
+                    new MenuItem('Log Out', ['_name' => 'logout']),
+                ]);
+            }
             if (in_array($this->_controller->getRequest()->getParam('action'), ['add', 'edit'])) {
-                $this->_controller->Crud->action()->setConfig('scaffold.fields_blacklist', ['created', 'modified']);
+                $action->setConfig('scaffold.fields_blacklist', ['created', 'modified']);
             }
         }
     }
