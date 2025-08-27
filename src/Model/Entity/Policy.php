@@ -11,7 +11,7 @@ use Cake\ORM\Entity;
  * @property string $id
  * @property string $user_id
  * @property string $url
- * @property string $descriptor
+ * @property string|array $descriptor
  * @property \Cake\I18n\DateTime $created
  * @property \Cake\I18n\DateTime $modified
  *
@@ -37,8 +37,11 @@ class Policy extends Entity
         'user' => true,
     ];
 
-    protected function _setDescriptor(string $value): string
+    protected function _setDescriptor(string|array $value): string|array
     {
+        if (is_array($value)) {
+            return $value;
+        }
         return json_encode(json_decode($value, true));
     }
 }
