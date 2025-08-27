@@ -19,12 +19,38 @@ class PoliciesController extends ApiController
         $this->Authorization->skipAuthorization();
     }
 
+    public function index()
+    {
+        $this->Crud->on('beforeRender', static function (EventInterface $event) {
+            /** @var \App\Model\Entity\Policy $entity */
+            foreach ($event->getSubject()->entities as $entity) {
+                if ($entity->descriptor) {
+                    $entity->descriptor = json_decode($entity->descriptor, true);
+                }
+            }
+        });
+        $this->Crud->execute();
+    }
+
     public function view()
     {
-        $this->Crud->on('beforeRender', function (EventInterface $event) {
+        $this->Crud->on('beforeRender', static function (EventInterface $event) {
+            /** @var \App\Model\Entity\Policy $entity */
             $entity = $event->getSubject()->entity;
-            $entity->descriptor = json_decode($entity->descriptor);
+            if ($entity->descriptor) {
+                $entity->descriptor = json_decode($entity->descriptor, true);
+            }
         });
+        $this->Crud->execute();
+    }
+
+    public function edit()
+    {
+        $data = $this->request->getData();
+        if (array_key_exists('descriptor', $data)) {
+            $this->setRequest($this->request->withData('descriptor', json_encode($data['descriptor'])));
+        }
+
         $this->Crud->execute();
     }
 }
