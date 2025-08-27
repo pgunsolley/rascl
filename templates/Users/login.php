@@ -1,4 +1,4 @@
-<div class="users form content">
+<div>
     <?= $this->Form->create() ?>
     <fieldset>
         <legend><?= __('Please enter your email and password') ?></legend>
