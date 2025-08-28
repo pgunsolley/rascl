@@ -119,9 +119,6 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
                 'fields' => $fields,
             ],
         ];
-        $service->loadAuthenticator('Authentication.Session', [
-            'identifier' => $passwordIdentifier,
-        ]);
 
         $prefix = $request->getParam('prefix');
 
@@ -142,6 +139,9 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
             return $service;
         }
 
+        $service->loadAuthenticator('Authentication.Session', [
+            'identifier' => $passwordIdentifier,
+        ]);
         $loginUrl = Router::url([
             'prefix' => false,
             'plugin' => null,
