@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a0920202e0de26b53a99fada906d731c",
+    "content-hash": "31553b4ef9b8610663d5241ec95c976e",
     "packages": [
         {
             "name": "cakephp/authentication",
@@ -500,6 +500,79 @@
                 }
             ],
             "time": "2025-08-20T18:49:47+00:00"
+        },
+        {
+            "name": "dereuromark/cakephp-databaselog",
+            "version": "4.2.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dereuromark/CakePHP-DatabaseLog.git",
+                "reference": "b536361c04dcaa55903ad6dc20d8e954b09b7488"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dereuromark/CakePHP-DatabaseLog/zipball/b536361c04dcaa55903ad6dc20d8e954b09b7488",
+                "reference": "b536361c04dcaa55903ad6dc20d8e954b09b7488",
+                "shasum": ""
+            },
+            "require": {
+                "cakephp/cakephp": "^5.1.1",
+                "php": ">=8.1"
+            },
+            "conflict": {
+                "cakephp/migrations": "<4.5"
+            },
+            "require-dev": {
+                "cakedc/cakephp-phpstan": "^4.0.0",
+                "dereuromark/cakephp-tools": "^3.0.0",
+                "fig-r/psr2r-sniffer": "dev-master",
+                "friendsofcake/search": "^7.0.0",
+                "phpunit/phpunit": "^10.5 || ^11.5 || ^12.1"
+            },
+            "suggest": {
+                "cakephp/migrations": "For migrations to run."
+            },
+            "type": "cakephp-plugin",
+            "autoload": {
+                "psr-4": {
+                    "DatabaseLog\\": "src/",
+                    "DatabaseLog\\Test\\Fixture\\": "tests/Fixture/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nick Baker",
+                    "homepage": "http://www.webtechnick.com",
+                    "role": "Original author"
+                },
+                {
+                    "name": "Mark Scherer",
+                    "homepage": "https://www.dereuromark.de",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Other contributors",
+                    "homepage": "https://github.com/dereuromark/CakePHP-DatabaseLog/graphs/contributors"
+                }
+            ],
+            "description": "CakePHP DatabaseLog Plugin",
+            "homepage": "https://github.com/dereuromark/CakePHP-DatabaseLog/",
+            "keywords": [
+                "cakephp",
+                "database",
+                "logging",
+                "logs",
+                "plugin"
+            ],
+            "support": {
+                "issues": "https://github.com/dereuromark/CakePHP-DatabaseLog/issues",
+                "source": "https://github.com/dereuromark/CakePHP-DatabaseLog/"
+            },
+            "time": "2025-07-01T11:46:07+00:00"
         },
         {
             "name": "firebase/php-jwt",

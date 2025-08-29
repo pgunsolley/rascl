@@ -63,6 +63,14 @@ return [
             'url' => env('DATABASE_URL', null),
         ],
 
+        'log' => [
+            'host' => 'localhost',
+            'username' => 'my_app',
+            'password' => 'secret',
+            'database' => 'my_app',
+            'url' => env('DATABASE_LOG_URL', null),
+        ],
+
         /*
          * The test connection is used during the test suite.
          */
