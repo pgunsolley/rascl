@@ -25,6 +25,13 @@ class CrudViewListener extends BaseListener
         }
     }
 
+    public function beforeRedirect()
+    {
+        if ($this->_crud()->isActionMapped()) {
+            $this->handleDeleteRedirect();
+        }
+    }
+
     protected function manageTitle()
     {
         $this->_action()->setConfig('scaffold.site_title_image', 'wifi.png');
@@ -57,6 +64,13 @@ class CrudViewListener extends BaseListener
         $viewBuilder = $this->_controller()->viewBuilder();
         if ($viewBuilder->getClassName() === null) {
             $viewBuilder->setClassName('CrudView\View\CrudView');
+        }
+    }
+
+    protected function handleDeleteRedirect()
+    {        
+        if ($this->_request()->getParam('action') === 'delete') {
+            $this->_controller->redirect(['action' => 'index']);
         }
     }
 }
