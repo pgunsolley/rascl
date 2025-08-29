@@ -3,7 +3,6 @@
 use Cake\Cache\Engine\MemcachedEngine;
 use Cake\Database\Connection;
 use Cake\Database\Driver\Mysql;
-use Cake\Log\Engine\FileLog;
 use Cake\Mailer\Transport\MailTransport;
 use function Cake\Core\env;
 
@@ -314,6 +313,18 @@ return [
             //'init' => ['SET GLOBAL innodb_stats_on_metadata = 0'],
         ],
 
+        'log' => [
+            'className' => Connection::class,
+            'driver' => Mysql::class,
+            'persistent' => false,
+            'timezone' => 'UTC',
+            'encoding' => 'utf8mb4',
+            'flags' => [],
+            'cacheMetadata' => true,
+            'log' => false,
+            'quoteIdentifiers' => false,
+        ],
+
         /*
          * The test connection is used during the test suite.
          */
@@ -331,32 +342,30 @@ return [
         ],
     ],
 
+    'DatabaseLog' => [
+        'connection' => 'log',
+    ],
+
     /*
      * Configures logging options
      */
     'Log' => [
         'debug' => [
-            'className' => FileLog::class,
-            'path' => LOGS,
-            'file' => 'debug',
-            'url' => env('LOG_DEBUG_URL', null),
+            'className' => 'DatabaseLog.Database',
             'scopes' => null,
+            'type' => 'debug',
             'levels' => ['notice', 'info', 'debug'],
         ],
         'error' => [
-            'className' => FileLog::class,
-            'path' => LOGS,
-            'file' => 'error',
-            'url' => env('LOG_ERROR_URL', null),
+            'className' => 'DatabaseLog.Database',
             'scopes' => null,
+            'type' => 'error',
             'levels' => ['warning', 'error', 'critical', 'alert', 'emergency'],
         ],
         // To enable this dedicated query log, you need to set your datasource's log flag to true
         'queries' => [
-            'className' => FileLog::class,
-            'path' => LOGS,
-            'file' => 'queries',
-            'url' => env('LOG_QUERIES_URL', null),
+            'className' => 'DatabaseLog.Database',
+            'type' => 'queries',
             'scopes' => ['cake.database.queries'],
         ],
     ],

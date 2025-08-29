@@ -16,4 +16,7 @@ return [
     'BootstrapUI' => [],
     'Search' => [],
     'ViteHelper' => [],
+    'DatabaseLog' => [
+        'routes' => false,
+    ],
 ];
