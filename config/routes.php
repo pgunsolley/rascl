@@ -12,39 +12,35 @@ $crud = static function (RouteBuilder $builder) {
     }
 };
 
-/** Chain calls to a RouteBuilder to allow use of closure expressions (to avoid nested closure 'use' references) */
-$chain = static function (RouteBuilder $builder) {
-    $connect = static function ($handler) use (&$connect, $builder) {
-        $handler($builder);
-        return $connect;
-    };
-    return $connect;
-};
+return static function (RouteBuilder $routes) use ($crud) {
+    $routes->setRouteClass(DashedRoute::class);
+    $routes->registerMiddleware('csrf', new CsrfProtectionMiddleware([
+        'httponly' => true,
+    ]));
 
-return fn(RouteBuilder $r) => 
-    $chain($r)
-    (fn(RouteBuilder $r) => $r->setRouteClass(DashedRoute::class))
-    (fn(RouteBuilder $r) => $r->scope('/', fn(RouteBuilder $r) => 
-        $chain($r)
-        (fn(RouteBuilder $r) => $r->registerMiddleware('csrf', new CsrfProtectionMiddleware([
-            'httponly' => true,
-        ])))
-        (fn(RouteBuilder $r) => $r->applyMiddleware('csrf'))
-        (fn(RouteBuilder $r) => $r->redirect('/', ['_name' => 'policies:index']))
-        (fn(RouteBuilder $r) => $r->connect('/login', ['controller' => 'Users', 'action' => 'login'], ['_name' => 'login']))
-        (fn(RouteBuilder $r) => $r->connect('/logout', ['controller' => 'Users', 'action' => 'logout'], ['_name' => 'logout']))
-        (fn(RouteBuilder $r) => $r->connect('/register', ['controller' => 'Users', 'action' => 'add'], ['_name' => 'register']))
-        (fn(RouteBuilder $r) => $r->scope('/users', ['_namePrefix' => 'users:', 'controller' => 'Users'], $crud))
-        (fn(RouteBuilder $r) => $r->scope('/policies', ['_namePrefix' => 'policies:', 'controller' => 'Policies'], $crud))
-        (fn(RouteBuilder $r) => $r->scope('/tags', ['_namePrefix' => 'tags:', 'controller' => 'Tags'], $crud))
-    ))
-    (fn(RouteBuilder $r) => $r->prefix('Api', ['_namePrefix' => 'api:'], fn(RouteBuilder $r) => 
-        $chain($r)
-        (fn(RouteBuilder $r) => $r->prefix('V1', ['_namePrefix' => 'v1:'], fn(RouteBuilder $r) => 
-            $chain($r)
-            (fn(RouteBuilder $r) => $r->post('/authenticate', ['controller' => 'Users', 'action' => 'authenticate'], 'authenticate'))
-            (fn(RouteBuilder $r) => $r->resources('Users')->resources('Policies'))
-        ))
-    ))
-    (fn(RouteBuilder $r) => $r->fallbacks())
-;
+    $routes->scope('/', static function (RouteBuilder $routes) use ($crud) {
+        $routes->applyMiddleware('csrf');
+        $routes->redirect('/', ['_name' => 'policies:index']);
+        $routes->connect('/login', ['controller' => 'Users', 'action' => 'login'], ['_name' => 'login']);
+        $routes->connect('/logout', ['controller' => 'Users', 'action' => 'logout'], ['_name' => 'logout']);
+        $routes->connect('/register', ['controller' => 'Users', 'action' => 'add'], ['_name' => 'register']);
+        $routes->scope('/users', ['_namePrefix' => 'users:', 'controller' => 'Users'], $crud);
+        $routes->scope('/policies', ['_namePrefix' => 'policies:', 'controller' => 'Policies'], $crud);
+        $routes->scope('/tags', ['_namePrefix' => 'tags:', 'controller' => 'Tags'], $crud);
+    });
+
+    $routes->prefix('Api', ['_namePrefix' => 'api:'], static function (RouteBuilder $routes) {
+        $routes->prefix('V1', ['_namePrefix' => 'v1:'], static function (RouteBuilder $routes) {
+            $routes->post('/authenticate', ['controller' => 'Users', 'action' => 'authenticate'], 'authenticate');
+            $routes->resources('Users');
+            $routes->resources('Policies');
+        });
+    });
+
+    $routes->prefix('Log', ['_namePrefix' => 'log:'], static function (RouteBuilder $routes) use ($crud) {
+        $routes->applyMiddleware('csrf');
+        $routes->scope('/', ['controller' => 'DatabaseLog'], $crud);
+    });
+  
+    $routes->fallbacks();
+};
