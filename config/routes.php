@@ -4,10 +4,10 @@ use Cake\Http\Middleware\CsrfProtectionMiddleware;
 use Cake\Routing\Route\DashedRoute;
 use Cake\Routing\RouteBuilder;
 
-/** Define named routes for Crud actions */
-$crud = static function (RouteBuilder $builder) {
+/** Define named routes for Crud actions. Index is always applied. Other actions may be opt out with ignore */
+$crud = fn(array $ignore = []) => static function (RouteBuilder $builder) use ($ignore) {
     $builder->connect('/', ['action' => 'index'], ['_name' => 'index']);
-    foreach (['view', 'add', 'edit', 'delete'] as $action) {
+    foreach (array_filter(['view', 'add', 'edit', 'delete'], fn($action) => !in_array($action, $ignore)) as $action) {
         $builder->connect("/$action/*", ['action' => $action], ['_name' => $action]);
     }
 };
@@ -24,9 +24,10 @@ return static function (RouteBuilder $routes) use ($crud) {
         $routes->connect('/login', ['controller' => 'Users', 'action' => 'login'], ['_name' => 'login']);
         $routes->connect('/logout', ['controller' => 'Users', 'action' => 'logout'], ['_name' => 'logout']);
         $routes->connect('/register', ['controller' => 'Users', 'action' => 'add'], ['_name' => 'register']);
-        $routes->scope('/users', ['_namePrefix' => 'users:', 'controller' => 'Users'], $crud);
-        $routes->scope('/policies', ['_namePrefix' => 'policies:', 'controller' => 'Policies'], $crud);
-        $routes->scope('/tags', ['_namePrefix' => 'tags:', 'controller' => 'Tags'], $crud);
+        $routes->scope('/users', ['_namePrefix' => 'users:', 'controller' => 'Users'], $crud());
+        $routes->scope('/policies', ['_namePrefix' => 'policies:', 'controller' => 'Policies'], $crud());
+        $routes->scope('/tags', ['_namePrefix' => 'tags:', 'controller' => 'Tags'], $crud());
+        // TODO: Add routes for relationship views
     });
 
     $routes->prefix('Api', ['_namePrefix' => 'api:'], static function (RouteBuilder $routes) {
@@ -37,9 +38,12 @@ return static function (RouteBuilder $routes) use ($crud) {
         });
     });
 
-    $routes->prefix('Log', ['_namePrefix' => 'log:'], static function (RouteBuilder $routes) use ($crud) {
+    $routes->prefix('Logs', ['_namePrefix' => 'logs:'], static function (RouteBuilder $routes) use ($crud) {
         $routes->applyMiddleware('csrf');
-        $routes->scope('/', ['controller' => 'DatabaseLog'], $crud);
+        $routes->scope('/', ['controller' => 'Logs'], static function (RouteBuilder $routes) use ($crud) {
+            $crud(ignore: ['add', 'edit'])($routes);
+            $routes->connect('/clear', ['action' => 'clear'], ['_name' => 'clear']);
+        });
     });
   
     $routes->fallbacks();
