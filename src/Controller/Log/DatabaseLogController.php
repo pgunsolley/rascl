@@ -15,7 +15,6 @@ class DatabaseLogController extends AppController
     {
         parent::initialize();
         $this->Crud->action()->setConfig('scaffold.sidebar_navigation', false);
-        $this->Authentication->allowUnauthenticated([$this->request->getParam('action')]);
         $this->Authorization->skipAuthorization();
     }
 }
