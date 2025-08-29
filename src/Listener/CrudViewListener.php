@@ -12,6 +12,7 @@ class CrudViewListener extends BaseListener
     public function beforeFilter()
     {
         if ($this->_crud()->isActionMapped()) {
+            $this->manageTitle();
             $this->manageFieldsBlacklist();
             $this->manageUtilityNavigation();
         }
@@ -22,9 +23,14 @@ class CrudViewListener extends BaseListener
         $this->manageCrudView();
     }
 
+    protected function manageTitle()
+    {
+        $this->_action()->setConfig('scaffold.site_title', 'rascl');
+    }
+
     protected function manageUtilityNavigation()
     {
-        if (!$this->_controller()->Authentication->getResult()->isValid()) return true;
+        if (!$this->_controller()->Authentication->getResult()->isValid()) return;
 
         $items = [new MenuItem('Log Out', ['_name' => 'logout'])];
         if ($this->_request()->getParam('prefix') === 'Log') {
