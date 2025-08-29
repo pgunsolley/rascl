@@ -20,11 +20,14 @@ class CrudViewListener extends BaseListener
 
     public function beforeRender()
     {
-        $this->manageCrudView();
+        if ($this->_crud()->isActionMapped()) {
+            $this->manageCrudView();
+        }
     }
 
     protected function manageTitle()
     {
+        $this->_action()->setConfig('scaffold.site_title_image', 'wifi.png');
         $this->_action()->setConfig('scaffold.site_title', 'rascl');
     }
 
@@ -33,10 +36,10 @@ class CrudViewListener extends BaseListener
         if (!$this->_controller()->Authentication->getResult()->isValid()) return;
 
         $items = [new MenuItem('Log Out', ['_name' => 'logout'])];
-        if ($this->_request()->getParam('prefix') === 'Log') {
+        if ($this->_request()->getParam('prefix') === 'Logs') {
             array_unshift($items, new MenuItem('Policies', ['_name' => 'policies:index']));
         } else {
-            array_unshift($items, new MenuItem('Logs', ['_name' => 'log:index']));
+            array_unshift($items, new MenuItem('Logs', ['_name' => 'logs:index']));
         }
         $this->_action()->setConfig('scaffold.utility_navigation', $items);
     }
