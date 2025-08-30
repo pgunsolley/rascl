@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller\Logs;
 
 use App\Controller\AppController;
+use Cake\Event\EventInterface;
 
 class LogsController extends AppController
 {
@@ -24,8 +25,19 @@ class LogsController extends AppController
 
     public function index()
     {
-        $action = $this->Crud->action();
-        $action->setConfig('scaffold.actions', ['view', 'delete']);
+        $this->Crud->on('afterPaginate', function (EventInterface $event) {
+            if($event->getSubject()->entities->count() > 0) {
+                $this->Crud->action()->setConfig('scaffold.actions', [
+                    'view',
+                    'delete',
+                    'clear' => [
+                        'link_title' => 'Clear Logs',
+                        'url' => ['_name' => 'logs:clear'],
+                        'scope' => 'table',
+                    ],
+                ]);
+            }
+        });
         $this->Crud->execute();
     }
 
