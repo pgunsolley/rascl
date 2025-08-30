@@ -29,7 +29,9 @@ class UsersController extends AppController
 
     public function add()
     {
-        $this->viewBuilder()->setClassName(AppView::class);
+        if (!$this->Authentication->getResult()->isValid()) {
+            $this->viewBuilder()->setClassName(AppView::class);
+        }
         $this->Crud->execute();
     }
 
