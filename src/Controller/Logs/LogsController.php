@@ -20,7 +20,6 @@ class LogsController extends AppController
             $action = $this->Crud->action();
             $action->setConfig('scaffold.sidebar_navigation', false);
         }
-        $this->Authorization->skipAuthorization();
     }
 
     public function index()

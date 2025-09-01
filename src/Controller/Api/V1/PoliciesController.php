@@ -13,14 +13,9 @@ use Cake\Event\EventInterface;
  */
 class PoliciesController extends ApiController
 {
-    public function initialize(): void
-    {
-        parent::initialize();
-        $this->Authorization->skipAuthorization();
-    }
-
     public function index()
     {
+        // TODO: Only return policies connected to user identity or have a descriptor that allows users to be added?
         $this->Crud->on('beforeRender', static function (EventInterface $event) {
             /** @var \App\Model\Entity\Policy $entity */
             foreach ($event->getSubject()->entities as $entity) {
@@ -34,6 +29,7 @@ class PoliciesController extends ApiController
 
     public function view()
     {
+        // TODO: Add authorization check after find
         $this->Crud->on('beforeRender', static function (EventInterface $event) {
             /** @var \App\Model\Entity\Policy $entity */
             $entity = $event->getSubject()->entity;
@@ -41,16 +37,6 @@ class PoliciesController extends ApiController
                 $entity->descriptor = json_decode($entity->descriptor, true);
             }
         });
-        $this->Crud->execute();
-    }
-
-    public function edit()
-    {
-        $data = $this->request->getData();
-        if (array_key_exists('descriptor', $data)) {
-            $this->setRequest($this->request->withData('descriptor', json_encode($data['descriptor'])));
-        }
-
         $this->Crud->execute();
     }
 }

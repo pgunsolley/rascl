@@ -16,7 +16,6 @@ class UsersController extends AppController
     {
         parent::initialize();
         $this->Authentication->allowUnauthenticated(['login', 'add']);
-        $this->Authorization->skipAuthorization();
     }
 
     public function index()

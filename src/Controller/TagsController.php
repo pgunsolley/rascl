@@ -10,12 +10,6 @@ namespace App\Controller;
  */
 class TagsController extends AppController
 {
-    public function initialize(): void
-    {
-        parent::initialize();
-        $this->Authorization->skipAuthorization();
-    }
-
     public function index()
     {
         $this->Crud->action()->setConfig('scaffold.fields_blacklist', ['id']);
