@@ -112,6 +112,11 @@ class UsersTable extends Table
         return $rules;
     }
 
+    public function findForSuperuserAuthentication(SelectQuery $query): SelectQuery
+    {
+        return $query->where(['is_superuser' => true]);
+    }
+
     public function findIndex(SelectQuery $query)
     {
         return $query->select(['id', 'email', 'is_superuser', 'created', 'modified']);
