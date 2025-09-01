@@ -21,12 +21,13 @@ use Authentication\AuthenticationService;
 use Authentication\AuthenticationServiceInterface;
 use Authentication\AuthenticationServiceProviderInterface;
 use Authentication\Identifier\AbstractIdentifier;
+use Authentication\Identifier\Resolver\OrmResolver as AuthenticationOrmResolver;
 use Authentication\Middleware\AuthenticationMiddleware;
 use Authorization\AuthorizationService;
 use Authorization\AuthorizationServiceInterface;
 use Authorization\AuthorizationServiceProviderInterface;
 use Authorization\Middleware\AuthorizationMiddleware;
-use Authorization\Policy\OrmResolver;
+use Authorization\Policy\OrmResolver as AuthorizationOrmResolver;
 use Cake\Core\Configure;
 use Cake\Core\ContainerInterface;
 use Cake\Datasource\FactoryLocator;
@@ -114,11 +115,6 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
             AbstractIdentifier::CREDENTIAL_USERNAME => 'email',
             AbstractIdentifier::CREDENTIAL_PASSWORD => 'password',
         ];
-        $passwordIdentifier = [
-            'Authentication.Password' => [
-                'fields' => $fields,
-            ],
-        ];
 
         $prefix = $request->getParam('prefix');
 
@@ -129,7 +125,11 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
                 'algorithm' => Configure::read('Authentication.Authenticators.Jwt.algorithm', 'RS256'),
             ]);
             $service->loadAuthenticator('Authentication.Form', [
-                'identifier' => $passwordIdentifier,
+                'identifier' => [
+                    'Authentication.Password' => [
+                        'fields' => $fields,
+                    ],
+                ],
                 'fields' => $fields,
                 'loginUrl' => Router::url([
                     '_name' => 'api:v1:authenticate',
@@ -139,6 +139,15 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
             return $service;
         }
 
+        $passwordIdentifier = [
+            'Authentication.Password' => [
+                'resolver' => [
+                    'className' => AuthenticationOrmResolver::class,
+                    'finder' => 'forSuperuserAuthentication',
+                ],
+                'fields' => $fields,
+            ],
+        ];
         $service->loadAuthenticator('Authentication.Session', [
             'identifier' => $passwordIdentifier,
         ]);
@@ -163,6 +172,6 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
 
     public function getAuthorizationService(ServerRequestInterface $request): AuthorizationServiceInterface
     {
-        return new AuthorizationService(new OrmResolver());
+        return new AuthorizationService(new AuthorizationOrmResolver());
     }
 }
