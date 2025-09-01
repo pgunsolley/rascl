@@ -31,7 +31,6 @@ class AppController extends Controller
         $this->loadComponent('Authentication.Authentication', [
             'logoutRedirect' => ['controller' => 'Users', 'action' => 'login'],
         ]);
-        $this->loadComponent('Authorization.Authorization');
         $this->loadComponent('Flash');
         $this->loadComponent('FormProtection');
         $this->loadComponent('Crud.Crud', [

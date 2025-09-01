@@ -18,11 +18,11 @@ class UsersController extends ApiController
     {
         parent::initialize();
         $this->Authentication->allowUnauthenticated(['authenticate']);
-        $this->Authorization->skipAuthorization();
     }
 
     public function authenticate(JwtService $jwt)
     {
+        $this->Authorization->skipAuthorization();
         $result = $this->Authentication->getResult();
         if ($result->isValid()) {
             $user = $result->getData();

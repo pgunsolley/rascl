@@ -9,9 +9,4 @@ namespace App\Controller;
  */
 class PoliciesUsersController extends AppController
 {
-    public function initialize(): void
-    {
-        parent::initialize();
-        $this->Authorization->skipAuthorization();
-    }
 }

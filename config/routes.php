@@ -1,5 +1,7 @@
 <?php
 
+use App\Authorization\ApiAuthorizationServiceProvider;
+use Authorization\Middleware\AuthorizationMiddleware;
 use Cake\Http\Middleware\CsrfProtectionMiddleware;
 use Cake\Routing\Route\DashedRoute;
 use Cake\Routing\RouteBuilder;
@@ -31,9 +33,10 @@ return static function (RouteBuilder $routes) use ($crud) {
     });
 
     $routes->prefix('Api', ['_namePrefix' => 'api:'], static function (RouteBuilder $routes) {
+        $routes->registerMiddleware('api-authorization', new AuthorizationMiddleware(new ApiAuthorizationServiceProvider()));
+        $routes->applyMiddleware('api-authorization');
         $routes->prefix('V1', ['_namePrefix' => 'v1:'], static function (RouteBuilder $routes) {
             $routes->post('/authenticate', ['controller' => 'Users', 'action' => 'authenticate'], 'authenticate');
-            $routes->resources('Users');
             $routes->resources('Policies');
         });
     });

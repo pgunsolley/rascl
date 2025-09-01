@@ -22,13 +22,6 @@ class ApiController extends Controller
         $this->loadComponent('Authentication.Authentication');
         $this->loadComponent('Authorization.Authorization');
         $this->loadComponent('Crud.Crud', [
-            'actions' => [
-                'Crud.Index',
-                'Crud.View',
-                'Crud.Add',
-                'Crud.Edit',
-                'Crud.Delete',
-            ],
             'listeners' => [
                 'Crud.Api',
             ],

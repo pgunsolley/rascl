@@ -21,13 +21,8 @@ use Authentication\AuthenticationService;
 use Authentication\AuthenticationServiceInterface;
 use Authentication\AuthenticationServiceProviderInterface;
 use Authentication\Identifier\AbstractIdentifier;
-use Authentication\Identifier\Resolver\OrmResolver as AuthenticationOrmResolver;
+use Authentication\Identifier\Resolver\OrmResolver;
 use Authentication\Middleware\AuthenticationMiddleware;
-use Authorization\AuthorizationService;
-use Authorization\AuthorizationServiceInterface;
-use Authorization\AuthorizationServiceProviderInterface;
-use Authorization\Middleware\AuthorizationMiddleware;
-use Authorization\Policy\OrmResolver as AuthorizationOrmResolver;
 use Cake\Core\Configure;
 use Cake\Core\ContainerInterface;
 use Cake\Datasource\FactoryLocator;
@@ -51,7 +46,7 @@ use Crud\Error\ExceptionRenderer;
  *
  * @extends \Cake\Http\BaseApplication<\App\Application>
  */
-class Application extends BaseApplication implements AuthenticationServiceProviderInterface, AuthorizationServiceProviderInterface
+class Application extends BaseApplication implements AuthenticationServiceProviderInterface
 {
     /**
      * Load all the application configuration and bootstrap logic.
@@ -84,8 +79,7 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
             ]))
             ->add(new RoutingMiddleware($this))
             ->add(new BodyParserMiddleware())
-            ->add(new AuthenticationMiddleware($this))
-            ->add(new AuthorizationMiddleware($this));
+            ->add(new AuthenticationMiddleware($this));
 
         return $middlewareQueue;
     }
@@ -103,7 +97,9 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
     }
     
     /**
-     * getAuthenticationService
+     * App-wide authentication service configuration and registration.
+     * If concerns become more complex, separate concerns into individual
+     * AuthenticationServiceProvider instances and leverage Router middleware.
      *
      * @param  ServerRequestInterface|ServerRequest $request
      * @return AuthenticationServiceInterface
@@ -142,7 +138,7 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
         $passwordIdentifier = [
             'Authentication.Password' => [
                 'resolver' => [
-                    'className' => AuthenticationOrmResolver::class,
+                    'className' => OrmResolver::class,
                     'finder' => 'forSuperuserAuthentication',
                 ],
                 'fields' => $fields,
@@ -168,10 +164,5 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
         ]);
 
         return $service;
-    }
-
-    public function getAuthorizationService(ServerRequestInterface $request): AuthorizationServiceInterface
-    {
-        return new AuthorizationService(new AuthorizationOrmResolver());
     }
 }
