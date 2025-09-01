@@ -114,6 +114,6 @@ class UsersTable extends Table
 
     public function findIndex(SelectQuery $query)
     {
-        return $query->select(['id', 'email', 'created', 'modified']);
+        return $query->select(['id', 'email', 'is_superuser', 'created', 'modified']);
     }
 }
