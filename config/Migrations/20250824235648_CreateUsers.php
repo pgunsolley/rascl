@@ -20,6 +20,10 @@ class CreateUsers extends BaseMigration
                 'default' => null,
                 'null' => false,
             ])
+            ->addColumn('is_superuser', 'boolean', [
+                'default' => false,
+                'null' => false,
+            ])
             ->addColumn('email', 'string', [
                 'default' => null,
                 'null' => false,

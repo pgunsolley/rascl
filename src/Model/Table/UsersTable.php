@@ -69,18 +69,33 @@ class UsersTable extends Table
      */
     public function validationDefault(Validator $validator): Validator
     {
-        $validator
+        $validator = $this->validationEmail($validator);
+        $validator = $this->validationPassword($validator);
+        $validator = $this->validationIsSuperuser($validator);
+
+        return $validator;
+    }
+
+    public function validationEmail(Validator $validator): Validator
+    {
+        return $validator
             ->email('email')
             ->requirePresence('email', 'create')
             ->notEmptyString('email');
+    }
 
-        $validator
+    public function validationPassword(Validator $validator): Validator
+    {
+        return $validator
             ->scalar('password')
             ->maxLength('password', 255)
             ->requirePresence('password', 'create')
             ->notEmptyString('password');
+    }
 
-        return $validator;
+    public function validationIsSuperuser(Validator $validator): Validator
+    {
+        return $validator->boolean('is_superuser');
     }
 
     /**
