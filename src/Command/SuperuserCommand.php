@@ -29,7 +29,7 @@ class SuperuserCommand extends Command
 
     public static function getDescription(): string
     {
-        return 'Command description here.';
+        return 'Command line superuser management utility.';
     }
 
     public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
