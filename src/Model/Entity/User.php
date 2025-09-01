@@ -11,6 +11,7 @@ use Cake\ORM\Entity;
  *
  * @property string $id
  * @property string $email
+ * @property bool   $is_superuser
  * @property string $password
  * @property \Cake\I18n\DateTime $created
  * @property \Cake\I18n\DateTime $modified
