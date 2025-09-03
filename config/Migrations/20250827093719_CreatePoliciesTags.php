@@ -15,7 +15,11 @@ class CreatePoliciesTags extends BaseMigration
     public function change(): void
     {
         $this
-            ->table('policies_tags')
+            ->table('policies_tags', ['id' => false, 'primary_key' => ['id']])
+            ->addColumn('id', 'uuid', [
+                'default' => null,
+                'null' => false,
+            ])
             ->addColumn('policy_id', 'uuid', [
                 'default' => null,
                 'null' => false,
@@ -24,6 +28,8 @@ class CreatePoliciesTags extends BaseMigration
                 'default' => null,
                 'null' => false,
             ])
+            ->addColumn('created', 'datetime')
+            ->addColumn('modified', 'datetime')
             ->create();
     }
 }

@@ -24,15 +24,11 @@ class CreatePolicies extends BaseMigration
                 'default' => null,
                 'null' => false,
             ])
-            ->addColumn('url', 'string', [
-                'default' => null,
-                'null' => false,
-            ])
             ->addColumn('descriptor', 'json', [
                 'default' => null,
                 'null' => false,
             ])
-            ->addIndex(['name', 'url'], ['unique' => true])
+            ->addIndex('name', ['unique' => true])
             ->addColumn('created', 'datetime')
             ->addColumn('modified', 'datetime')
             ->create();

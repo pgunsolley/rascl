@@ -9,7 +9,7 @@ use Cake\ORM\Entity;
  * Tag Entity
  *
  * @property string $id
- * @property string $title
+ * @property string $name
  * @property \Cake\I18n\DateTime $created
  * @property \Cake\I18n\DateTime $modified
  *
@@ -28,7 +28,7 @@ class Tag extends Entity
      * @var array<string, bool>
      */
     protected array $_accessible = [
-        'title' => true,
+        'name' => true,
         'created' => true,
         'modified' => true,
         'policies' => true,

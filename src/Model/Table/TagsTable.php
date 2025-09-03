@@ -41,7 +41,7 @@ class TagsTable extends Table
         parent::initialize($config);
 
         $this->setTable('tags');
-        $this->setDisplayField('title');
+        $this->setDisplayField('name');
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
@@ -69,10 +69,10 @@ class TagsTable extends Table
     public function validationDefault(Validator $validator): Validator
     {
         $validator
-            ->scalar('title')
-            ->maxLength('title', 255)
-            ->requirePresence('title', 'create')
-            ->notEmptyString('title');
+            ->scalar('name')
+            ->maxLength('name', 255)
+            ->requirePresence('name', 'create')
+            ->notEmptyString('name');
 
         return $validator;
     }

@@ -77,12 +77,6 @@ class PoliciesTable extends Table
             ->notEmptyString('name');
 
         $validator
-            ->url('url')
-            ->maxLength('url', 255)
-            ->requirePresence('url', 'create')
-            ->notEmptyString('url');
-
-        $validator
             ->scalar('descriptor')
             ->maxLength('descriptor', 4294967295)
             ->requirePresence('descriptor', 'create')
@@ -104,13 +98,13 @@ class PoliciesTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $rules->add($rules->isUnique(['name', 'url']), ['errorField' => 'name']);
+        $rules->add($rules->isUnique(['name']), ['errorField' => 'name']);
 
         return $rules;
     }
 
     public function findIndex(SelectQuery $query)
     {
-        return $query->select(['id', 'name', 'url', 'created', 'modified']);
+        return $query->select(['id', 'name', 'created', 'modified']);
     }
 }
