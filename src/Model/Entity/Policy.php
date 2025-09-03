@@ -10,7 +10,6 @@ use Cake\ORM\Entity;
  *
  * @property string $id
  * @property string $name
- * @property string $url
  * @property string|array $descriptor
  * @property \Cake\I18n\DateTime $created
  * @property \Cake\I18n\DateTime $modified
@@ -31,7 +30,6 @@ class Policy extends Entity
      */
     protected array $_accessible = [
         'name' => true,
-        'url' => true,
         'descriptor' => true,
         'created' => true,
         'modified' => true,

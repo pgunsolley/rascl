@@ -20,7 +20,7 @@ class CreateTags extends BaseMigration
                 'default' => null,
                 'null' => false,
             ])
-            ->addColumn('title', 'string', [
+            ->addColumn('name', 'string', [
                 'default' => null,
                 'null' => false,
             ])

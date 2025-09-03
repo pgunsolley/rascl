@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 use Migrations\BaseMigration;
 
-class CreatePoliciesUsers extends BaseMigration
+class CreateEndpointsPolicies extends BaseMigration
 {
     /**
      * Change Method.
@@ -15,15 +15,21 @@ class CreatePoliciesUsers extends BaseMigration
     public function change(): void
     {
         $this
-            ->table('policies_users')
+            ->table('endpoints_policies', ['id' => false, 'primary_key' => ['id']])
+            ->addColumn('id', 'uuid', [
+                'default' => null,
+                'null' => false,
+            ])
+            ->addColumn('endpoint_id', 'uuid', [
+                'default' => null,
+                'null' => false,
+            ])
             ->addColumn('policy_id', 'uuid', [
                 'default' => null,
                 'null' => false,
             ])
-            ->addColumn('user_id', 'uuid', [
-                'default' => null,
-                'null' => false,
-            ])
+            ->addColumn('created', 'datetime')
+            ->addColumn('modified', 'datetime')
             ->create();
     }
 }

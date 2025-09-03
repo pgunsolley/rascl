@@ -17,12 +17,6 @@ declare(strict_types=1);
 namespace App;
 
 use App\Service\JwtService;
-use Authentication\AuthenticationService;
-use Authentication\AuthenticationServiceInterface;
-use Authentication\AuthenticationServiceProviderInterface;
-use Authentication\Identifier\AbstractIdentifier;
-use Authentication\Identifier\Resolver\OrmResolver;
-use Authentication\Middleware\AuthenticationMiddleware;
 use Cake\Core\Configure;
 use Cake\Core\ContainerInterface;
 use Cake\Datasource\FactoryLocator;
@@ -33,9 +27,6 @@ use Cake\Http\MiddlewareQueue;
 use Cake\ORM\Locator\TableLocator;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
-use Cake\Routing\Router;
-use Psr\Http\Message\ServerRequestInterface;
-use Cake\Http\ServerRequest;
 use Crud\Error\ExceptionRenderer;
 
 /**
@@ -46,7 +37,7 @@ use Crud\Error\ExceptionRenderer;
  *
  * @extends \Cake\Http\BaseApplication<\App\Application>
  */
-class Application extends BaseApplication implements AuthenticationServiceProviderInterface
+class Application extends BaseApplication
 {
     /**
      * Load all the application configuration and bootstrap logic.
@@ -78,8 +69,7 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
                 'cacheTime' => Configure::read('Asset.cacheTime'),
             ]))
             ->add(new RoutingMiddleware($this))
-            ->add(new BodyParserMiddleware())
-            ->add(new AuthenticationMiddleware($this));
+            ->add(new BodyParserMiddleware());
 
         return $middlewareQueue;
     }
@@ -94,75 +84,5 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
     public function services(ContainerInterface $container): void
     {
         $container->add(JwtService::class);
-    }
-    
-    /**
-     * App-wide authentication service configuration and registration.
-     * If concerns become more complex, separate concerns into individual
-     * AuthenticationServiceProvider instances and leverage Router middleware.
-     *
-     * @param  ServerRequestInterface|ServerRequest $request
-     * @return AuthenticationServiceInterface
-     */
-    public function getAuthenticationService(ServerRequestInterface $request): AuthenticationServiceInterface
-    {
-        $service = new AuthenticationService();
-        $fields = [
-            AbstractIdentifier::CREDENTIAL_USERNAME => 'email',
-            AbstractIdentifier::CREDENTIAL_PASSWORD => 'password',
-        ];
-
-        $prefix = $request->getParam('prefix');
-
-        if ($prefix && str_contains($prefix, 'Api')) {
-            $service->loadAuthenticator('Authentication.Jwt', [
-                'identifier' => 'Authentication.JwtSubject',
-                'secretKey' => Configure::read('Authentication.Authenticators.Jwt.publicKey', null),
-                'algorithm' => Configure::read('Authentication.Authenticators.Jwt.algorithm', 'RS256'),
-            ]);
-            $service->loadAuthenticator('Authentication.Form', [
-                'identifier' => [
-                    'Authentication.Password' => [
-                        'fields' => $fields,
-                    ],
-                ],
-                'fields' => $fields,
-                'loginUrl' => Router::url([
-                    '_name' => 'api:v1:authenticate',
-                ]),
-            ]);
-
-            return $service;
-        }
-
-        $passwordIdentifier = [
-            'Authentication.Password' => [
-                'resolver' => [
-                    'className' => OrmResolver::class,
-                    'finder' => 'forSuperuserAuthentication',
-                ],
-                'fields' => $fields,
-            ],
-        ];
-        $service->loadAuthenticator('Authentication.Session', [
-            'identifier' => $passwordIdentifier,
-        ]);
-        $loginUrl = Router::url([
-            'prefix' => false,
-            'plugin' => null,
-            '_name' => 'login',
-        ]);
-        $service->setConfig([
-            'loginRedirect' => Router::url(['_name' => 'policies:view']),
-            'unauthenticatedRedirect' => $loginUrl,
-            'queryParam' => 'redirect',
-        ]);
-        $service->loadAuthenticator('Authentication.Form', [
-            'identifier' => $passwordIdentifier,
-            'fields' => $fields,
-            'loginUrl' => $loginUrl,
-        ]);
-
-        return $service;
     }
 }

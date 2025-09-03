@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 use Migrations\BaseMigration;
 
-class CreateTagsUsers extends BaseMigration
+class CreateEndpoints extends BaseMigration
 {
     /**
      * Change Method.
@@ -15,16 +15,20 @@ class CreateTagsUsers extends BaseMigration
     public function change(): void
     {
         $this
-            ->table('tags_users', ['id' => false, 'primary_key' => ['id']])
+            ->table('endpoints', ['id' => false, 'primary_key' => ['id']])
             ->addColumn('id', 'uuid', [
                 'default' => null,
                 'null' => false,
             ])
-            ->addColumn('tag_id', 'uuid', [
+            ->addColumn('service_id', 'string', [
                 'default' => null,
                 'null' => false,
             ])
-            ->addColumn('user_id', 'uuid', [
+            ->addColumn('description', 'string', [
+                'default' => null,
+                'null' => true,
+            ])
+            ->addColumn('url', 'string', [
                 'default' => null,
                 'null' => false,
             ])
