@@ -14,7 +14,7 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\DateTime $created
  * @property \Cake\I18n\DateTime $modified
  *
- * @property \App\Model\Entity\User[] $users
+ * @property \App\Model\Entity\Endpoint[] $endpoints
  * @property \App\Model\Entity\Tag[] $tags
  */
 class Policy extends Entity
@@ -33,7 +33,7 @@ class Policy extends Entity
         'descriptor' => true,
         'created' => true,
         'modified' => true,
-        'users' => true,
+        'endpoints' => true,
         'tags' => true,
     ];
 

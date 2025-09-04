@@ -16,8 +16,8 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\DateTime $created
  * @property \Cake\I18n\DateTime $modified
  *
- * @property \App\Model\Entity\Policy[] $policies
  * @property \App\Model\Entity\Tag[] $tags
+ * @property \App\Model\Entity\Endpoint[] $endpoints
  */
 class User extends Entity
 {
@@ -35,8 +35,8 @@ class User extends Entity
         'password' => true,
         'created' => true,
         'modified' => true,
-        'policies' => true,
         'tags' => true,
+        'endpoints' => true,
     ];
 
     /**

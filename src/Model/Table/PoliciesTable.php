@@ -48,18 +48,8 @@ class PoliciesTable extends Table
 
         $this->addBehavior('Timestamp');
 
-        $this->belongsToMany('Users', [
-            'joinTable' => 'policies_users',
-            'foreignKey' => 'policy_id',
-            'bindingKey' => 'id',
-            'targetForeignKey' => 'user_id',
-        ]);
-        $this->belongsToMany('Tags', [
-            'joinTable' => 'policies_tags',
-            'foreignKey' => 'policy_id',
-            'bindingKey' => 'id',
-            'targetForeignKey' => 'tag_id',
-        ]);
+        $this->belongsToMany('Tags');
+        $this->belongsToMany('Endpoints');
     }
 
     /**
