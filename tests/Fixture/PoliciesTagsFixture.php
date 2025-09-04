@@ -19,9 +19,11 @@ class PoliciesTagsFixture extends TestFixture
     {
         $this->records = [
             [
-                'id' => 1,
-                'policy_id' => 'f1d31015-9dcc-4906-a111-f13ee0de9224',
-                'tag_id' => 'e4f2c06c-4e6a-445c-8045-8ff01d8c81cc',
+                'id' => '3859aa37-5338-4be3-a3a4-f3a612ed8e30',
+                'policy_id' => 'bccf76be-0208-4ce8-a51b-7ab9c8d161e3',
+                'tag_id' => 'b1a41c14-66aa-41e3-b7f3-140aa36bf20a',
+                'created' => '2025-09-04 12:14:32',
+                'modified' => '2025-09-04 12:14:32',
             ],
         ];
         parent::init();
