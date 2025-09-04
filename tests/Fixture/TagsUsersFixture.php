@@ -19,9 +19,11 @@ class TagsUsersFixture extends TestFixture
     {
         $this->records = [
             [
-                'id' => 1,
-                'tag_id' => 'c6653af8-7ae1-4abc-b4f9-a7528f0d73d3',
-                'user_id' => 'c61803c3-7022-4a6d-8104-46b657a5f884',
+                'id' => '4e6a2c77-a5d9-4ea7-82aa-3de12f8ce675',
+                'tag_id' => '971aefd1-68dc-48f5-914b-3f68187deb21',
+                'user_id' => 'd9d88a5c-5477-461e-aecb-6cce5f27ec69',
+                'created' => '2025-09-04 12:14:41',
+                'modified' => '2025-09-04 12:14:41',
             ],
         ];
         parent::init();

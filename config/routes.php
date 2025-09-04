@@ -8,10 +8,13 @@ use Authorization\Middleware\AuthorizationMiddleware;
 use Cake\Http\Middleware\CsrfProtectionMiddleware;
 use Cake\Routing\Route\DashedRoute;
 use Cake\Routing\RouteBuilder;
+use Cake\Utility\Inflector;
 
-/** Define named routes for Crud actions. Index is always applied. Other actions may be opt out with ignore */
+/** Define named routes for Crud actions. */
 $crud = fn(array $ignore = []) => static function (RouteBuilder $builder) use ($ignore) {
-    $builder->connect('/', ['action' => 'index'], ['_name' => 'index']);
+    if (!in_array('index', $ignore)) {
+        $builder->connect('/', ['action' => 'index'], ['_name' => 'index']);
+    }
     foreach (array_filter(['view', 'add', 'edit', 'delete'], fn($action) => !in_array($action, $ignore)) as $action) {
         $builder->connect("/$action/*", ['action' => $action], ['_name' => $action]);
     }
@@ -31,9 +34,27 @@ return static function (RouteBuilder $routes) use ($crud) {
         $routes->connect('/login', ['controller' => 'Users', 'action' => 'login'], ['_name' => 'login']);
         $routes->connect('/logout', ['controller' => 'Users', 'action' => 'logout'], ['_name' => 'logout']);
         $routes->connect('/register', ['controller' => 'Users', 'action' => 'add'], ['_name' => 'register']);
-        $routes->scope('/users', ['_namePrefix' => 'users:', 'controller' => 'Users'], $crud());
-        $routes->scope('/policies', ['_namePrefix' => 'policies:', 'controller' => 'Policies'], $crud());
-        $routes->scope('/tags', ['_namePrefix' => 'tags:', 'controller' => 'Tags'], $crud());
+
+        foreach ([
+            'endpoints',
+            'endpoints-policies',
+            'endpoints-tags',
+            'endpoints-users',
+            'policies',
+            'policies-tags',
+            'services',
+            'services-tags',
+            'tags',
+            'tags-users',
+            'users',
+        ] as $crudScope) {
+            $routes->scope('/' . $crudScope, [
+                '_namePrefix' => $crudScope . ':', 
+                'controller' => Inflector::camelize(Inflector::underscore($crudScope)),
+            ],
+            $crud());
+        }
+
         $routes->prefix('Logs', ['_namePrefix' => 'logs:'], static function (RouteBuilder $routes) use ($crud) {
             $routes->scope('/', ['controller' => 'Logs'], static function (RouteBuilder $routes) use ($crud) {
                 $crud(ignore: ['add', 'edit'])($routes);
@@ -51,7 +72,5 @@ return static function (RouteBuilder $routes) use ($crud) {
             $routes->post('/authenticate', ['controller' => 'Users', 'action' => 'authenticate'], 'authenticate');
             $routes->resources('Policies');
         });
-    });
-  
-    $routes->fallbacks();
+    });  
 };
