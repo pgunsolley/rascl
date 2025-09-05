@@ -41,7 +41,6 @@ return static function (RouteBuilder $routes) use ($crud) {
             'endpoints-policies',
             'endpoints-tags',
             'endpoints-users',
-            'methods',
             'policies',
             'policies-tags',
             'services',
@@ -57,6 +56,7 @@ return static function (RouteBuilder $routes) use ($crud) {
             $crud());
         }
 
+        $routes->scope('/methods', ['_namePrefix' => 'methods:', 'controller' => 'Methods'], $crud(ignore: ['add', 'edit', 'delete']));
         $routes->prefix('Logs', ['_namePrefix' => 'logs:'], static function (RouteBuilder $routes) use ($crud) {
             $routes->scope('/', ['controller' => 'Logs'], static function (RouteBuilder $routes) use ($crud) {
                 $crud(ignore: ['add', 'edit'])($routes);
