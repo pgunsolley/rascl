@@ -37,9 +37,11 @@ return static function (RouteBuilder $routes) use ($crud) {
 
         foreach ([
             'endpoints',
+            'endpoints-methods',
             'endpoints-policies',
             'endpoints-tags',
             'endpoints-users',
+            'methods',
             'policies',
             'policies-tags',
             'services',
