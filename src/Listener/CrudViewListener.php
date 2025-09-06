@@ -67,6 +67,7 @@ class CrudViewListener extends BaseListener
         $this->_action()->setConfig('scaffold.fields_blacklist', match ($actionName) {
             'add', 'edit' => ['created', 'modified'],
             'index' => ['id'],
+            default => [],
         });
     }
 
