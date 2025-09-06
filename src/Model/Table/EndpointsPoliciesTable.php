@@ -48,14 +48,8 @@ class EndpointsPoliciesTable extends Table
 
         $this->addBehavior('Timestamp');
 
-        $this->belongsTo('Endpoints', [
-            'foreignKey' => 'endpoint_id',
-            'joinType' => 'INNER',
-        ]);
-        $this->belongsTo('Policies', [
-            'foreignKey' => 'policy_id',
-            'joinType' => 'INNER',
-        ]);
+        $this->belongsTo('Endpoints');
+        $this->belongsTo('Policies');
     }
 
     /**

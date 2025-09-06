@@ -48,14 +48,8 @@ class PoliciesTagsTable extends Table
 
         $this->addBehavior('Timestamp');
 
-        $this->belongsTo('Policies', [
-            'foreignKey' => 'policy_id',
-            'joinType' => 'INNER',
-        ]);
-        $this->belongsTo('Tags', [
-            'foreignKey' => 'tag_id',
-            'joinType' => 'INNER',
-        ]);
+        $this->belongsTo('Policies');
+        $this->belongsTo('Tags');
     }
 
     /**

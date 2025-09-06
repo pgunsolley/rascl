@@ -50,25 +50,11 @@ class EndpointsTable extends Table
 
         $this->addBehavior('Timestamp');
 
-        $this->belongsTo('Services', [
-            'foreignKey' => 'service_id',
-            'joinType' => 'INNER',
-        ]);
-        $this->belongsToMany('Policies', [
-            'foreignKey' => 'endpoint_id',
-            'targetForeignKey' => 'policy_id',
-            'joinTable' => 'endpoints_policies',
-        ]);
-        $this->belongsToMany('Tags', [
-            'foreignKey' => 'endpoint_id',
-            'targetForeignKey' => 'tag_id',
-            'joinTable' => 'endpoints_tags',
-        ]);
-        $this->belongsToMany('Users', [
-            'foreignKey' => 'endpoint_id',
-            'targetForeignKey' => 'user_id',
-            'joinTable' => 'endpoints_users',
-        ]);
+        $this->belongsTo('Services');
+        $this->belongsToMany('Policies');
+        $this->belongsToMany('Tags');
+        $this->belongsToMany('Users');
+        $this->belongsToMany('Methods');
     }
 
     /**

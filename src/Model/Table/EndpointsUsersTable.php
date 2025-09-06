@@ -48,14 +48,8 @@ class EndpointsUsersTable extends Table
 
         $this->addBehavior('Timestamp');
 
-        $this->belongsTo('Endpoints', [
-            'foreignKey' => 'endpoint_id',
-            'joinType' => 'INNER',
-        ]);
-        $this->belongsTo('Users', [
-            'foreignKey' => 'user_id',
-            'joinType' => 'INNER',
-        ]);
+        $this->belongsTo('Endpoints');
+        $this->belongsTo('Users');
     }
 
     /**

@@ -48,14 +48,8 @@ class TagsUsersTable extends Table
 
         $this->addBehavior('Timestamp');
 
-        $this->belongsTo('Tags', [
-            'foreignKey' => 'tag_id',
-            'joinType' => 'INNER',
-        ]);
-        $this->belongsTo('Users', [
-            'foreignKey' => 'user_id',
-            'joinType' => 'INNER',
-        ]);
+        $this->belongsTo('Tags');
+        $this->belongsTo('Users');
     }
 
     /**
