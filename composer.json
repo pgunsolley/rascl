@@ -4,6 +4,12 @@
     "license": "MIT",
     "type": "project",
     "homepage": "https://cakephp.org",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/pgunsolley/crud-view.git"
+        }
+    ],
     "require": {
         "php": ">=8.1",
         "cakephp/authentication": "^3.3",
@@ -14,7 +20,7 @@
         "dereuromark/cakephp-databaselog": "^4.2",
         "firebase/php-jwt": "^6.11",
         "friendsofcake/crud": "^7.2",
-        "friendsofcake/crud-view": "^0.51.1",
+        "friendsofcake/crud-view": "dev-master",
         "friendsofcake/search": "^7.5",
         "mobiledetect/mobiledetectlib": "^4.8.03",
         "passchn/cakephp-vite": "^2.4"
