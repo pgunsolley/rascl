@@ -43,11 +43,7 @@ class MethodsTable extends Table
         $this->setDisplayField('name');
         $this->setPrimaryKey('id');
 
-        $this->belongsToMany('Endpoints', [
-            'foreignKey' => 'method_id',
-            'targetForeignKey' => 'endpoint_id',
-            'joinTable' => 'endpoints_methods',
-        ]);
+        $this->belongsToMany('Endpoints');
     }
 
     /**

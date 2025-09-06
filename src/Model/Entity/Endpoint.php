@@ -19,6 +19,7 @@ use Cake\ORM\Entity;
  * @property \App\Model\Entity\Policy[] $policies
  * @property \App\Model\Entity\Tag[] $tags
  * @property \App\Model\Entity\User[] $users
+ * @property \App\Model\Entity\Method[] $methods
  */
 class Endpoint extends Entity
 {
@@ -41,5 +42,6 @@ class Endpoint extends Entity
         'policies' => true,
         'tags' => true,
         'users' => true,
+        'methods' => true,
     ];
 }

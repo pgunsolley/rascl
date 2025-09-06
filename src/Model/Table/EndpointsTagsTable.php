@@ -48,14 +48,8 @@ class EndpointsTagsTable extends Table
 
         $this->addBehavior('Timestamp');
 
-        $this->belongsTo('Endpoints', [
-            'foreignKey' => 'endpoint_id',
-            'joinType' => 'INNER',
-        ]);
-        $this->belongsTo('Tags', [
-            'foreignKey' => 'tag_id',
-            'joinType' => 'INNER',
-        ]);
+        $this->belongsTo('Endpoints');
+        $this->belongsTo('Tags');
     }
 
     /**

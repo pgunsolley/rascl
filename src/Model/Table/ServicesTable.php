@@ -48,14 +48,8 @@ class ServicesTable extends Table
 
         $this->addBehavior('Timestamp');
 
-        $this->hasMany('Endpoints', [
-            'foreignKey' => 'service_id',
-        ]);
-        $this->belongsToMany('Tags', [
-            'foreignKey' => 'service_id',
-            'targetForeignKey' => 'tag_id',
-            'joinTable' => 'services_tags',
-        ]);
+        $this->hasMany('Endpoints');
+        $this->belongsToMany('Tags');
     }
 
     /**

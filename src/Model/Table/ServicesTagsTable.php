@@ -48,14 +48,8 @@ class ServicesTagsTable extends Table
 
         $this->addBehavior('Timestamp');
 
-        $this->belongsTo('Services', [
-            'foreignKey' => 'service_id',
-            'joinType' => 'INNER',
-        ]);
-        $this->belongsTo('Tags', [
-            'foreignKey' => 'tag_id',
-            'joinType' => 'INNER',
-        ]);
+        $this->belongsTo('Services');
+        $this->belongsTo('Tags');
     }
 
     /**
