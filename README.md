@@ -1,53 +1,68 @@
-# CakePHP Application Skeleton
+# Rascl (ˈrɑːskᵊl) - RESTful AccesS ControL
 
-![Build Status](https://github.com/cakephp/app/actions/workflows/ci.yml/badge.svg?branch=5.x)
-[![Total Downloads](https://img.shields.io/packagist/dt/cakephp/app.svg?style=flat-square)](https://packagist.org/packages/cakephp/app)
-[![PHPStan](https://img.shields.io/badge/PHPStan-level%208-brightgreen.svg?style=flat-square)](https://github.com/phpstan/phpstan)
+Rascl is an open source API Gateway that provides some of the functionality found in services such as AWS API Gateway or Azure API Gateway.
 
-A skeleton for creating applications with [CakePHP](https://cakephp.org) 5.x.
+I started developing it for personal projects, and for prototyping real-world application services without the dependency of Iaas providers.
 
-The framework source code can be found here: [cakephp/cakephp](https://github.com/cakephp/cakephp).
+It is under heavy development and is not (currently) intended for production environments.
 
 ## Installation
 
-1. Download [Composer](https://getcomposer.org/doc/00-intro.md) or update `composer self-update`.
-2. Run `php composer.phar create-project --prefer-dist cakephp/app [app_name]`.
+Coming soon
 
-If Composer is installed globally, run
+## Administration
 
-```bash
-composer create-project --prefer-dist cakephp/app
+The administrator web portal can be accessed at `rascl.ddev.site`.
+
+The portal is only accessible to superusers.
+
+Newly registered users at `rascl.ddev.site/register` are not superusers. 
+
+You may use the superuser command to create new superusers, or to promote or demote existing users.
+
+Use `ddev cake superuser --help` for command options
+
+## Development
+
+Rascl uses [DDEV](https://docs.ddev.com/en/stable/).
+
+### Configuration
+
+Dependency installation will trigger command hooks that will generate an `config/app_local.php` file by copying from `config/app_local.example.php`.
+
+See [CakePHP Docs](https://book.cakephp.org/5/en/development/configuration.html)
+
+
+For API Authentication to work, you will need to generate a valid OpenSSL keypair:
+
+```
+# generate private key
+openssl genrsa -out config/jwt.key 1024
+# generate public key
+openssl rsa -in config/jwt.key -outform PEM -pubout -out config/jwt.pem
 ```
 
-In case you want to use a custom app dir name (e.g. `/myapp/`):
+Import the keys in `config/app_local.php`
 
-```bash
-composer create-project --prefer-dist cakephp/app myapp
+```
+'Authentication' => [
+    'Authenticators' => [
+        'Jwt' => [
+            'privateKey' => ..,
+            'publicKey' => ..,
+        ],
+    ],
+],
 ```
 
-You can now either use your machine's webserver to view the default home page, or start
-up the built-in webserver with:
+### Migrations
 
-```bash
-bin/cake server -p 8765
-```
+Run migrations using `ddev cake migrations migrate`.
 
-Then visit `http://localhost:8765` to see the welcome page.
+## Contributing
 
-## Update
+Pull requests are welcome, however I'm not currently actively reviewing requests. I hope to change this with time.
 
-Since this skeleton is a starting point for your application and various files
-would have been modified as per your needs, there isn't a way to provide
-automated upgrades, so you have to do any updates manually.
+## License
 
-## Configuration
-
-Read and edit the environment specific `config/app_local.php` and set up the
-`'Datasources'` and any other configuration relevant for your application.
-Other environment agnostic settings can be changed in `config/app.php`.
-
-## Layout
-
-The app skeleton uses [Milligram](https://milligram.io/) (v1.3) minimalist CSS
-framework by default. You can, however, replace it with any other library or
-custom styles.
+[MIT](https://choosealicense.com/licenses/mit/)
