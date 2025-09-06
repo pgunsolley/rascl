@@ -64,9 +64,10 @@ class CrudViewListener extends BaseListener
     protected function manageFieldsBlacklist()
     {
         $actionName = $this->_request()->getParam('action');
-        if (in_array($actionName, ['add', 'edit'])) {
-            $this->_action()->setConfig('scaffold.fields_blacklist', ['created', 'modified']);
-        }
+        $this->_action()->setConfig('scaffold.fields_blacklist', match ($actionName) {
+            'add', 'edit' => ['created', 'modified'],
+            'index' => ['id'],
+        });
     }
 
     protected function manageCrudViewClass()

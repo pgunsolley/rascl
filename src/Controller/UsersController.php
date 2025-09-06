@@ -21,7 +21,7 @@ class UsersController extends AppController
     public function index()
     {
         $action = $this->Crud->action();
-        $action->setConfig('scaffold.fields_blacklist', ['id', 'password']);
+        $action->setConfig('scaffold.fields_blacklist', ['password']);
         $action->findMethod('index');
         $this->Crud->execute();
     }
