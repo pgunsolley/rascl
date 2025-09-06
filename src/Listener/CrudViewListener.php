@@ -15,13 +15,14 @@ class CrudViewListener extends BaseListener
             $this->manageTitle();
             $this->manageFieldsBlacklist();
             $this->manageUtilityNavigation();
+            $this->manageSidebarNavigation();
         }
     }
 
     public function beforeRender()
     {
         if ($this->_crud()->isActionMapped()) {
-            $this->manageCrudView();
+            $this->manageCrudViewClass();
         }
     }
 
@@ -36,6 +37,15 @@ class CrudViewListener extends BaseListener
     {
         $this->_action()->setConfig('scaffold.site_title_image', 'wifi.png');
         $this->_action()->setConfig('scaffold.site_title', 'rascl');
+    }
+
+    protected function manageSidebarNavigation()
+    {
+        $this->_action()->setConfig('scaffold.sidebar_navigation', [
+            new MenuItem('Users', ['_name' => 'users:index']),
+            new MenuItem('Policies', ['_name' => 'policies:index']),
+            new MenuItem('Services', ['_name' => 'services:index']),
+        ]);
     }
 
     protected function manageUtilityNavigation()
@@ -59,7 +69,7 @@ class CrudViewListener extends BaseListener
         }
     }
 
-    protected function manageCrudView()
+    protected function manageCrudViewClass()
     {
         $viewBuilder = $this->_controller()->viewBuilder();
         if ($viewBuilder->getClassName() === null) {
@@ -68,7 +78,7 @@ class CrudViewListener extends BaseListener
     }
 
     protected function handleDeleteRedirect()
-    {        
+    {
         if ($this->_request()->getParam('action') === 'delete') {
             $this->_controller->redirect(['action' => 'index']);
         }
