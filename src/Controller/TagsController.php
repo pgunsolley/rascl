@@ -10,9 +10,4 @@ namespace App\Controller;
  */
 class TagsController extends AppController
 {
-    public function index()
-    {
-        $this->Crud->action()->setConfig('scaffold.fields_blacklist', ['id']);
-        $this->Crud->execute();
-    }
 }

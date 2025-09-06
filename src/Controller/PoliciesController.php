@@ -13,7 +13,7 @@ class PoliciesController extends AppController
     public function index()
     {
         $action = $this->Crud->action();
-        $action->setConfig('scaffold.fields_blacklist', ['id', 'descriptor']);
+        $action->setConfig('scaffold.fields_blacklist', ['descriptor']);
         $action->findMethod('index');
         $this->Crud->execute();
     }
