@@ -1,5 +1,9 @@
 # Rascl (ˈrɑːskᵊl) - RESTful AccesS ControL
 
+## :warning: Development is currently inactive
+
+## About
+
 Rascl is an open source API Gateway that provides some of the functionality found in services such as AWS API Gateway or Azure API Gateway.
 
 I started developing it for personal projects, and for prototyping real-world application services without the dependency of Iaas providers.
